@@ -31,14 +31,20 @@ NX PP PRN PRT QP RRC UCP VP WHADJP WHAVP WHNP WHPP X CC CD DT EX FW IN JJ JJR
 JJS LS MD NN NNS NNP NNPS PDT POS PRP PRP$ RB RBR RBS RP SYM TO UH VB VBD VBG
 VBN VBP VBZ WDT WP WP$ WRB""".split()
 
-relation_constituents = constituent_macros['V'] + ['IN', 'VP', 'TO']
-statement_contsituents = constituent_macros['SS'] + constituent_macros['W']
+relation_constituents = ['IN', 'TO']
+statement_constituents = constituent_macros['SS'] + constituent_macros['W']
+property_constituents = constituent_macros['J']
+process_constituents = constituent_macros['V'] + ['VP']
 
 def contsituen2type(const):
     if const in relation_constituents:
         return 'relation'
-    if const in statement_contsituents:
+    if const in statement_constituents:
         return 'statement'
+    if const in property_constituents:
+        return 'property'
+    if const in process_constituents:
+        return 'process'
 
 
 class RuleParser:
@@ -155,8 +161,10 @@ class ConceptualGraph:
     Edge = namedtuple('Edge', ['left', 'right'])
 
     type_map = {
-        'relation' : 'shape=box',
-        'statement' : 'shape=polygon',
+        'relation' : 'shape=polygon',
+        'statement' : 'shape=box',
+        'process' : 'shape=parallelogram',
+        'property' : 'shape=plaintext',
         None : 'shape=ellipse'
     }
 
@@ -206,6 +214,7 @@ class ConceptualGraph:
 
         for name, lines in subgraphs.items():
             dot_code.append('subgraph cluster' + str(name) + '{')
+            #dot_code.append('  ' + ConceptualGraph.type_map['statement'])
             for l in lines: dot_code.append('  ' + l)
             dot_code.append('}')
 

@@ -1,4 +1,4 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+  %% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[english]{article}
 \usepackage[utf8]{inputenc}
@@ -6,7 +6,13 @@
 \usepackage[]{algorithm2e}
 \usepackage{newlfont}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{tgcursor}
 
+%\graphicspath{ {./images/}    }
 
 \begin{document}
 
@@ -32,7 +38,7 @@ parse trees. The DSL (Domain-Specific Language) to define the patterns
 is designed to 
 
 
-\section{Motivation}
+\subsection{Motivation}
 Natural language can be seen as a \textit{serialization of thought}. In order to communicate, the sender encodes a part of his mental content into a one-dimensional representation and transmits it to the receiver who retranslates it into his own mental representation. Words that refere to entites are hereby set into relation to other concepts or entities, which can happen in arbitrary convoluted ways. Adjectives can add properties to entities, which are expressed by a noun. Prepositional clauses may modify a process or action denoted by a verb. Same words can have different meanings. Word endings contain infomation about tense or number.
 
 Most of these combinations happen from a local to a global scale: Two adjacent words refere to an entity, a chunk of some other words may refer to something else, a chunking of them again may express a process or relation. Thus it comes natural to see a hierachical structure within each sentence. Constituency-based parse trees (or phrase-structure parse trees) are a natural way to assign a hieracical structure to a sentence. Despite beeing a syntactic method, constituency-based parse trees contain a lot explicite semantic information. Some constituents refer to a single entity or concept, others express relations between concepts.
@@ -40,7 +46,7 @@ Most of these combinations happen from a local to a global scale: Two adjacent w
 Computational linguistics possesses various other methods to recognize properties of single words within a sentence, which provide information about undelying properties, entities and relations. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories. The aim of this paper it to develop a method to incorporate information of words or chunks to extract predicates that can be feed into a database or ontology.
 
  
-\section{Related Work}
+\subsection{Related Work}
 
 The possibly best known example for pattern matching in words and
 constituents of a sentence for relation extractions are Hearst-Patterns.
@@ -71,7 +77,7 @@ If a preceding or following also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
 
-\section{Problem}
+\subsection{Problem}
 
 Pattern matching in tagged or parsed corpora is a common technique
 
@@ -87,7 +93,7 @@ A phrase structure parse tree captures the a
 
 
 \section{DSL Syntax}
-
+\graphicspath{{D:/LATEX/Reports@IIT/figures/}}
 A program in the Domain-Specific language consists of list of rules,
 each seperated by a newline. A rule consists of three parts a head,
 a pattern and transformation. 
@@ -110,8 +116,55 @@ strings.
 
 The transformation part 
 
+\paragraph{Cluster references}{
+
+If the transistion of a rule is equal to the root of the rule, istead of transforming to itself ...
+
+
+\begin{figure}
+\centering
+\includegraphics[width=.5\linewidth]{cluster_reference_parsetree}
+
+\lstset{
+  %caption=Descriptive Caption Text, 
+  basicstyle=\footnotesize, frame=tb,
+  xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+}
+
+\begin{lstlisting}[basicstyle=\ttfamily]
+SS : NP VP .? : NP-VP : SS
+SS1 : IN SS2 :: SS2
+VP : V SS : V-SS : V
+\end{lstlisting}
+
+\includegraphics[width=.3\linewidth]{cluster_reference_graph}
+
+\caption{}
+\end{figure}
+}
+
 \subsection{Head Splitting}
-For some sentences it is desireable to let a node point to multiple other nodes. Consider this enumeration of two verb phrases: "Bob runs and cries." 
+For some sentences it is desireable to let a node point to multiple other nodes. Consider this enumeration of two verb phrases: "Bob runs and cries."
+
+\begin{figure}
+\centering
+\includegraphics[width=.5\linewidth]{headsplit_parsetree}
+
+\lstset{
+  %caption=Descriptive Caption Text, 
+  basicstyle=\footnotesize, frame=tb,
+  xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+}
+
+\begin{lstlisting}[basicstyle=\ttfamily]
+ SS : NP VP . : NP-VP : SS
+ VP : VP1 CC VP2 :: VP1 VP2 
+\end{lstlisting}
+
+\includegraphics[width=.3\linewidth]{headsplit_graph}
+
+\caption{Head Splitting: The rules in the middle applied to the parsetree on the top yield to the graph in the bottom.}
+\end{figure}
 
 
 \section{Examples}
@@ -159,8 +212,9 @@ parsetree $\leftarrow$ parse(sentence)
 \end{algorithm}
 
 \section{Conclusion}
+
 \textbf{Acknowledgements.} This work was part of the \textit{Koex} project (abbr. knowledge
-extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück.
+extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}.
 
 \bibliography{knoex.bib}{}
 \bibliographystyle{plain}

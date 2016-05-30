@@ -1,0 +1,12 @@
+digraph headsplit{
+
+rankdir=LR;
+
+bob  [label="Bob"]
+runs [shape=box]
+talks [shape=box]
+
+bob -> runs
+bob -> talks
+
+} 
