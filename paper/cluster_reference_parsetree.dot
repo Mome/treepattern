@@ -1,4 +1,6 @@
 digraph PropTree{
+//node [ranksep=0.5]
+//edge [weight=0.5]
 N3011233516 [label="S"]
 N3011235244 [label="NP"]
 N3011235372 [label="NNP"]

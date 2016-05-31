@@ -1,6 +1,6 @@
 import unittest
-from tree_pattern import *
-
+from trees import PropertyTree, IteratorTree
+from rules import RuleParser
 
 class TestIteratroTree(unittest.TestCase):
 

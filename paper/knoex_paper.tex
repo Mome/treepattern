@@ -38,7 +38,7 @@ parse trees. The DSL (Domain-Specific Language) to define the patterns
 is designed to 
 
 
-\subsection{Motivation}
+\paragraph{Motivation}
 Natural language can be seen as a \textit{serialization of thought}. In order to communicate, the sender encodes a part of his mental content into a one-dimensional representation and transmits it to the receiver who retranslates it into his own mental representation. Words that refere to entites are hereby set into relation to other concepts or entities, which can happen in arbitrary convoluted ways. Adjectives can add properties to entities, which are expressed by a noun. Prepositional clauses may modify a process or action denoted by a verb. Same words can have different meanings. Word endings contain infomation about tense or number.
 
 Most of these combinations happen from a local to a global scale: Two adjacent words refere to an entity, a chunk of some other words may refer to something else, a chunking of them again may express a process or relation. Thus it comes natural to see a hierachical structure within each sentence. Constituency-based parse trees (or phrase-structure parse trees) are a natural way to assign a hieracical structure to a sentence. Despite beeing a syntactic method, constituency-based parse trees contain a lot explicite semantic information. Some constituents refer to a single entity or concept, others express relations between concepts.
@@ -46,7 +46,7 @@ Most of these combinations happen from a local to a global scale: Two adjacent w
 Computational linguistics possesses various other methods to recognize properties of single words within a sentence, which provide information about undelying properties, entities and relations. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories. The aim of this paper it to develop a method to incorporate information of words or chunks to extract predicates that can be feed into a database or ontology.
 
  
-\subsection{Related Work}
+\paragraph{Related Work}
 
 The possibly best known example for pattern matching in words and
 constituents of a sentence for relation extractions are Hearst-Patterns.
@@ -65,7 +65,6 @@ phrase structure parse tress {[}citation{]}.
 
 \end{figure}
 
-
 Figure 1 visualizes the basic relationships that can be expressed
 in XPath in order to construct more complex patterns. Patterns can
 be matched on two axes, relative to a matching node denoted as \textit{self}.
@@ -76,6 +75,7 @@ axis \textit{preceding} and \textit{following} nodes can be matched.
 If a preceding or following also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
+\paragraph{}
 
 \subsection{Problem}
 
@@ -93,7 +93,6 @@ A phrase structure parse tree captures the a
 
 
 \section{DSL Syntax}
-\graphicspath{{D:/LATEX/Reports@IIT/figures/}}
 A program in the Domain-Specific language consists of list of rules,
 each seperated by a newline. A rule consists of three parts a head,
 a pattern and transformation. 
@@ -116,9 +115,13 @@ strings.
 
 The transformation part 
 
+\paragraph{Property matching}{
+
+}
+
 \paragraph{Cluster references}{
 
-If the transistion of a rule is equal to the root of the rule, istead of transforming to itself ...
+If a sentence contains a dependent clause, one part of the sentence referece to another part of the sentence. For this purpose it is possible to specifiy a subgraph instead of a node as the head. If the root of a rule is equal to its transistions, the entities refering to the ancestors of a matching constituent will be put into a cluster. If another entity wants to point to the entity representing the root match, it will point to the cluster instead.
 
 
 \begin{figure}
@@ -126,20 +129,21 @@ If the transistion of a rule is equal to the root of the rule, istead of transfo
 \includegraphics[width=.5\linewidth]{cluster_reference_parsetree}
 
 \lstset{
-  %caption=Descriptive Caption Text, 
+  %caption=Descriptive Caption Text,
+  numbers=left,
   basicstyle=\footnotesize, frame=tb,
-  xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
-}
+  xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
+} 
 
 \begin{lstlisting}[basicstyle=\ttfamily]
 SS : NP VP .? : NP-VP : SS
-SS1 : IN SS2 :: SS2
-VP : V SS : V-SS : V
+SS : IN SS1   :       : SS1
+VP : V  SS    : V-SS  : V
 \end{lstlisting}
 
-\includegraphics[width=.3\linewidth]{cluster_reference_graph}
+\includegraphics[width=.7\linewidth]{cluster_reference_graph}
 
-\caption{}
+\caption{Cluster references Root and tail of line 1 are both SS: ... Line 2: "that" is ommited. Line 3: make an edge beteween the verb of the first part ("said") and the dependent clause "Lara smokes". }
 \end{figure}
 }
 

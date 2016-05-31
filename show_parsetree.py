@@ -1,7 +1,8 @@
 import nltk, os, sys
 from nltk.parse import stanford
 from utils import proptree_to_dot
-from tree_pattern import PropertyTree, add_properties
+from trees import PropertyTree
+from builder import add_properties
 
 
 stanford_path = os.path.expanduser('~/.local/stanford-parser-full-2015-12-09')
