@@ -88,8 +88,8 @@
 **-PUT** - marks the locative complement of put.<br />
 **-SBJ (surface subject)** - marks the structural surface subject of both matrix and embedded clauses, including those with null subjects.<br />
 **-TPC ("topicalized")** - marks elements that appear before the subject in a declarative sentence, but in two cases only:<br />
- - if the front element is associated with a *T* in the position of the gap.
- - if the fronted element is left-dislocated (i.e. it is associated with a resumptive pronoun in the position of the gap).
+- if the front element is associated with a *T* in the position of the gap.<br />
+- if the fronted element is left-dislocated (i.e. it is associated with a resumptive pronoun in the position of the gap).<br />
 **-VOC (vocative)** - marks nouns of address, regardless of their position in the sentence. It is not coindexed to the subject and not get -TPC when it is sentence-initial.<br />
 
 
