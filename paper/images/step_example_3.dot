@@ -1,0 +1,17 @@
+digraph{
+rankdir=LR
+compound=true
+subgraph cluster3010653324{
+  N3010675276 [ label="i", shape=ellipse ]
+  N3010675372 [ label="saw", shape=parallelogram ]
+  N3010675436 [ label="bob", shape=ellipse ]
+  N3010675564 [ label="with", shape=polygon ]
+  N3010675660 [ label="a", shape=ellipse ]
+  N3010675692 [ label="binocular", shape=ellipse ]
+}
+N3010675276 -> N3010675372
+N3010675372 -> N3010675436
+N3010675564 -> N3010675372
+N3010675660 -> N3010675692
+N3010675692 -> N3010675564
+}
