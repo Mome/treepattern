@@ -109,7 +109,7 @@ Adverbials are generally VP adjuncts.
 ## Miscellaneous
 
 **-CLR (closely related)** - marks constituents that occupy some middle ground between arguments and adjunct of the verb phrase. These roughly correspond to "predication adjuncts", prepositional ditransitives, and some "phrasel verbs". Although constituents marked with -CLR are not strictly speaking complements, they are treated as complements whenever it makes a bracketing difference. The precise meaning of -CLR depends somewhat on the category of the phrase.<br />
-**on S or SBAR** - These categories are usually arguments, so the -CLR tag indicates that the clause is more adverbial than normal clausal arguments. The most common case is the infinitival semi-complement of use, but there are a variety of other cases.
+**on S or SBAR** - These categories are usually arguments, so the -CLR tag indicates that the clause is more adverbial than normal clausal arguments. The most common case is the infinitival semi-complement of use, but there are a variety of other cases.<br />
 **on PP, ADVP, SBAR-PRP, etc** - On categories that are ordinarily interpreted as (adjunct) adverbials, -CLR indicates a somewhat closer relationship to the verb. For example:<br />
 
 ## Prepositional Ditransitives
@@ -119,8 +119,10 @@ In order to ensure consistency, the Treebank recognizes only a limited class of 
 Phrasal verbs are also annotated with -CLR or a combination of -PRT and PP-CLR. Words that are considered borderline between particle and adverb are often bracketed with ADVP-CLR.
 
 ## Predication Adjuncts
+
 Many of Quirk's predication adjuncts are annotated with -CLR.
-on NP - To the extent that -CLR is used on NPs, it indicates that the NP is part of some kind of "fixed phrase" or expression, such as take care of. Variation is more likely for NPs than for other uses of -CLR.
-**-CLF (cleft)** - marks it-clefts ("true clefts") and may be added to the labels S, SINV, or SQ.
-**-HLN (headline)** - marks headlines and datelines. Note that headlines and datelines always constitute a unit of text that is structurally independent from the following sentence.
-**-TTL (title)** - is attached to the top node of a title when this title appears inside running text. -TTL implies -NOM. The internal structure of the title is bracketed as usual.
+
+**on NP** - To the extent that -CLR is used on NPs, it indicates that the NP is part of some kind of "fixed phrase" or expression, such as take care of. Variation is more likely for NPs than for other uses of -CLR.<br />
+**-CLF (cleft)** - marks it-clefts ("true clefts") and may be added to the labels S, SINV, or SQ.<br />
+**-HLN (headline)** - marks headlines and datelines. Note that headlines and datelines always constitute a unit of text that is structurally independent from the following sentence.<br />
+**-TTL (title)** - is attached to the top node of a title when this title appears inside running text. -TTL implies -NOM. The internal structure of the title is bracketed as usual.<br />
