@@ -1,80 +1,146 @@
 List of Constituent Tags
 ------------------------
 
-S - simple declarative clause, i.e. one that is not introduced by a (possible empty) subordinating conjunction or a wh-word and that does not exhibit subject-verb inversion.
-SBAR - Clause introduced by a (possibly empty) subordinating conjunction.
-SBARQ - Direct question introduced by a wh-word or a wh-phrase. Indirect questions and relative clauses should be bracketed as SBAR, not SBARQ.
-SINV - Inverted declarative sentence, i.e. one in which the subject follows the tensed verb or modal.
-SQ - Inverted yes/no question, or main clause of a wh-question, following the wh-phrase in SBARQ.
+# Clause / Sentence Level
 
-Phrase Level
+*S* - simple declarative clause, i.e. one that is not introduced by a (possible empty) subordinating conjunction or a wh-word and that does not exhibit subject-verb inversion.
 
-ADJP - Adjective Phrase.
-ADVP - Adverb Phrase.
-CONJP - Conjunction Phrase.
-FRAG - Fragment.
-INTJ - Interjection. Corresponds approximately to the part-of-speech tag UH.
+*SBAR* - Clause introduced by a (possibly empty) subordinating conjunction.
+
+*SBARQ* - Direct question introduced by a wh-word or a wh-phrase. Indirect questions and relative clauses should be bracketed as SBAR, not SBARQ.
+
+*SINV* - Inverted declarative sentence, i.e. one in which the subject follows the tensed verb or modal.
+
+*SQ* - Inverted yes/no question, or main clause of a wh-question, following the wh-phrase in SBARQ.
+
+
+# Phrase Level
+
+*ADJP* - Adjective Phrase.
+
+*ADVP* - Adverb Phrase.
+
+*CONJP* - Conjunction Phrase.
+
+*FRAG* - Fragment.
+
+*INTJ* - Interjection. Corresponds approximately to the part-of-speech tag UH.
+
 LST - List marker. Includes surrounding punctuation.
+
 NAC - Not a Constituent; used to show the scope of certain prenominal modifiers within an NP.
+
 NP - Noun Phrase. 
+
 NX - Used within certain complex NPs to mark the head of the NP. Corresponds very roughly to N-bar level but used quite differently.
+
 PP - Prepositional Phrase.
+
 PRN - Parenthetical. 
+
 PRT - Particle. Category for words that should be tagged RP. 
+
 QP - Quantifier Phrase (i.e. complex measure/amount phrase); used within NP.
+
 RRC - Reduced Relative Clause. 
+
 UCP - Unlike Coordinated Phrase. 
+
 VP - Vereb Phrase. 
+
 WHADJP - Wh-adjective Phrase. Adjectival phrase containing a wh-adverb, as in how hot.
+
 WHAVP - Wh-adverb Phrase. Introduces a clause with an NP gap. May be null (containing the 0 complementizer) or lexical, containing a wh-adverb such as how or why.
+
 WHNP - Wh-noun Phrase. Introduces a clause with an NP gap. May be null (containing the 0 complementizer) or lexical, containing some wh-word, e.g. who, which book, whose daughter, none of which, or how many leopards.
+
 WHPP - Wh-prepositional Phrase. Prepositional phrase containing a wh-noun phrase (such as of which or by whose authority) that either introduces a PP gap or is contained by a WHNP.
+
 X - Unknown, uncertain, or unbracketable. X is often used for bracketing typos and in bracketing the...the-constructions.
-Word level
+
+
+# Word Level
 
 CC - Coordinating conjunction
+
 CD - Cardinal number
+
 DT - Determiner
+
 EX - Existential there
+
 FW - Foreign word
+
 IN - Preposition or subordinating conjunction
+
 JJ - Adjective
+
 JJR - Adjective, comparative
+
 JJS - Adjective, superlative
+
 LS - List item marker
+
 MD - Modal
+
 NN - Noun, singular or mass
+
 NNS - Noun, plural
+
 NNP - Proper noun, singular
+
 NNPS - Proper noun, plural
+
 PDT - Predeterminer
+
 POS - Possessive ending
+
 PRP - Personal pronoun
+
 PRP$ - Possessive pronoun (prolog version PRP-S)
+
 RB - Adverb
+
 RBR - Adverb, comparative
+
 RBS - Adverb, superlative
+
 RP - Particle
+
 SYM - Symbol
+
 TO - to
+
 UH - Interjection
+
 VB - Verb, base form
+
 VBD - Verb, past tense
+
 VBG - Verb, gerund or present participle
+
 VBN - Verb, past participle
+
 VBP - Verb, non-3rd person singular present
+
 VBZ - Verb, 3rd person singular present
+
 WDT - Wh-determiner
+
 WP - Wh-pronoun
+
 WP$ - Possessive wh-pronoun (prolog version WP-S)
+
 WRB - Wh-adverb
 
 
-Form/function discrepancies
+# Form/function discrepancies
 
 -ADV (adverbial) - marks a constituent other than ADVP or PP when it is used adverbially (e.g. NPs or free ("headless" relatives). However, constituents that themselves are modifying an ADVP generally do not get -ADV. If a more specific tag is available (for example, -TMP) then it is used alone and -ADV is implied. See the Adverbials section.
 -NOM (nominal) - marks free ("headless") relatives and gerunds when they act nominally.
-Grammatical role
+
+
+# Grammatical role
 
 -DTV (dative) - marks the dative object in the unshifted form of the double object construction. If the preposition introducing the "dative" object is for, it is considered benefactive (-BNF). -DTV (and -BNF) is only used after verbs that can undergo dative shift.
 -LGS (logical subject) - is used to mark the logical subject in passives. It attaches to the NP object of by and not to the PP node itself.
@@ -87,7 +153,7 @@ if the fronted element is left-dislocated (i.e. it is associated with a resumpti
 -VOC (vocative) - marks nouns of address, regardless of their position in the sentence. It is not coindexed to the subject and not get -TPC when it is sentence-initial.
 Adverbials
 
-Adverbials are generally VP adjuncts.
+# Adverbials are generally VP adjuncts.
 
 -BNF (benefactive) - marks the beneficiary of an action (attaches to NP or PP). 
 This tag is used only when (1) the verb can undergo dative shift and (2) the prepositional variant (with the same meaning) uses for. The prepositional objects of dative-shifting verbs with other prepositions than for (such as to or of) are annotated -DTV.
@@ -98,7 +164,7 @@ This tag is used only when (1) the verb can undergo dative shift and (2) the pre
 -PRP (purpose or reason) - marks purpose or reason clauses and PPs.
 -TMP (temporal) - marks temporal or aspectual adverbials that answer the questions when, how often, or how long. It has some uses that are not strictly adverbial, auch as with dates that modify other NPs at S- or VP-level. In cases of apposition involving SBAR, the SBAR should not be labeled -TMP. Only in "financialspeak," and only when the dominating PP is a PP-DIR, may temporal modifiers be put at PP object level. Note that -TMP is not used in possessive phrases. 
 
-Miscellaneous
+# Miscellaneous
 
 -CLR (closely related) - marks constituents that occupy some middle ground between arguments and adjunct of the verb phrase. These roughly correspond to "predication adjuncts", prepositional ditransitives, and some "phrasel verbs". Although constituents marked with -CLR are not strictly speaking complements, they are treated as complements whenever it makes a bracketing difference. The precise meaning of -CLR depends somewhat on the category of the phrase.
 on S or SBAR - These categories are usually arguments, so the -CLR tag indicates that the clause is more adverbial than normal clausal arguments. The most common case is the infinitival semi-complement of use, but there are a variety of other cases.
