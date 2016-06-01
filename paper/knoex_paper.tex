@@ -12,6 +12,7 @@
 \usepackage{listings}
 \usepackage{tgcursor}
 \usepackage{glossaries}
+\usepackage{rotating}
 
 \graphicspath{ {images/} }
 \lstset{basicstyle=\ttfamily}
@@ -96,7 +97,7 @@ A phrase structure parse tree captures the a
 A program in the Domain-Specific Language consists of a list of rules. Each rule consists of four parts (root-pattern, pattern, relations and transformations), each separated by a collon: 
 
 \[
-\mathtt{root-pattern\ :\ pattern\ :\ relations\ :\ transformations}
+\mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformations}
 \]
 
 It can be red in the following way: First find a node that matches the root-pattern
@@ -120,7 +121,7 @@ strings.
 
   \begin{lstlisting}
     V  = {VB, VBD, VBG, VBN, VBP, VBZ}
-    N  = {NN, NNS, NNP, NNPS}
+    N  = {NN, NNS, NNP, NNPS, PRP}
     W  = {WHADJP, WHAVP, WHNP, WHPP}
     SS = {S, SBAR, SBARQ, SINV, SQ}
     J  = {JJ, JJR, JJS}
@@ -130,10 +131,9 @@ strings.
 }
 
 \paragraph{Property matching}
-Matching of other properties than 'terminal' or 'label' is expressed in squared brackets after the variable name. Write a variable name and a value separated by an equal sign to check if a node has a property with that name and value. The expression \lstinline{[ner=person]} matches nouns with the NER-tag 'person'. Write only the variable name to check if a node has a propertry with that name. \lstinline{J[color]} matches adjectives with the property 'color'. Multiple constraints are separeted by a comma: \lstinline{N[ner=person, gender=female]}.
-The right hand side of a property constraint can also be a set values. In this case a constitiuent must have one of these properties to match. Example: \lstinline{DT[terminal={an,a}]} - matches a determiner with terminal 'a' or 'an'.
+Matching of other properties than 'terminal' or 'label' is expressed in squared brackets after the variable name. Write a variable name and a value separated by an equal sign to check if a node has a property with that name and value. The expression \lstinline{N[ner=person]} matches nouns with the NER-tag 'person'. Write only the variable name to check if a node has a propertry with that name. \lstinline{J[color]} matches adjectives with the property 'color'. Multiple constraints are separeted by a comma: \lstinline{N[ner=person | gender=female]}.
+The right hand side of a property constraint can also be a set values. In this case a constitiuent must have one of these properties to match. Example: \lstinline|DT[terminal={an,a}]| - matches a determiner with terminal 'a' or 'an'.
 
-\paragraph{Postfix Optional \& Multiple matching}
 
 
 \paragraph{Cluster references}
@@ -165,7 +165,7 @@ VP : V  SS    : V-SS  : V
 
 
 \paragraph{Head Splitting}
-For some sentences it is desireable to let a node point to multiple other nodes. Consider this enumeration of two verb phrases: "Bob runs and cries."
+For some sentences it is desireable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
 
 \begin{figure}
 \centering
@@ -188,9 +188,12 @@ For some sentences it is desireable to let a node point to multiple other nodes.
 \end{figure}
 
 
-\section{Examples}
+\paragraph{Predicate Mode}
+In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
 
-sparql querries
+\begin{lstlisting}
+  S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
+\end{lstlisting}
 
 
 \section{Algorithm}
@@ -232,9 +235,44 @@ parsetree $\leftarrow$ parse(sentence)
 
 \end{algorithm}
 
+
+
+\begin{sidewaystable}
+    \centering
+    \caption{Your caption here}
+   \begin{tabular}{ll}
+    First First & First Second\\
+    Second First & Second Second
+    \end{tabular}
+\end{sidewaystable}
+
+
+\section{Example: Hearst-Pattern}
+
+The exact form of the first Hearst-Pattern in its original publication is:
+
+\[
+NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n
+\]
+
+Expressed in the DSL this looks like:
+
+\[
+\mathtt{NP\ :\ NP0\ such\ as\ ((N ,)+\ ,\ \{and|or\})?\ N : N\text{--}NP0 : NP0}
+\]
+
+Since multiple and optional matching is not yet implemented, here is a version without these advanced features, that will match exaclty three nouns after 'such as':
+
+\[
+\mathtt{NP\ :\ N0\ such\ as\ N1\ ,\ N2\ ,\ CC\ N3\ :\ N1\text{--}N0\ N2\text{--}N0\ N3\text{--}N0\ :\ N0}
+\]
+
+Applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles."
+, this rule results in the three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
+
 \section{Conclusion}
 
-\textbf{Acknowledgements.} This work was part of the \textit{Koex} project (abbr. knowledge
+\textbf{Acknowledgements.} This work was part of the \textit{Knoex} project (abbr. knowledge
 extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In the current version the postfix operator for optional and multiple matching as well as head-splitting is not implemented.
 
 \bibliography{knoex.bib}{}

@@ -1,20 +1,6 @@
-SS : NP VP . : NP-VP : SS
-SS : NP VP : NP-VP : SS
-SS1 : IN SS2 :: SS2
-
-VP : V NP : V-NP : V
-VP : V PP : PP-V : V
-VP : V ADJP : V-ADJP : V
-VP : V NP PP : PP-V, V-NP : V
-VP : V SS : V-SS : V
-VP : VP1 CC VP2 : CC-VP1, CC-VP2 : CC
-
-NP : DT N : DT-N : N
-NP : PRP$ N : PRP$-N : N
-NP : NP1 PP : PP-NP1 : NP1
-NP : DT J N : DT-N, J-N : N
-
-PP : Y[label={TO,IN}] NP : NP-Y : Y
-
-DT : _[terminal={a, an}] :: indefinite
-DT : the :: definite
+#SS : NP VP . : NP-VP : SS
+#VP : V NP : V-NP : V
+#NP : J N : J-N : N
+#NP : N1 such as N2 , N3 CC N4 : N2-N1 N3-N1 N4-N1 : N1
+#NP : N such as N1 , N1 CC N1 : N1-is_a-N : N
+NP : N0 such as N1 , N2 , CC N3 : N1-N0 N2-N0 N3-N0 : N0

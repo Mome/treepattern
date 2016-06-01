@@ -4,7 +4,7 @@ from collections import namedtuple
 constituent_list = """S SBAR SBARQ SINV SQ ADJP ADVP CONJP FRAG INTJ LST NAC NP
 NX PP PRN PRT QP RRC UCP VP WHADJP WHAVP WHNP WHPP X CC CD DT EX FW IN JJ JJR
 JJS LS MD NN NNS NNP NNPS PDT POS PRP PRP$ RB RBR RBS RP SYM TO UH VB VBD VBG
-VBN VBP VBZ WDT WP WP$ WRB""".split()
+VBN VBP VBZ WDT WP WP$ WRB , .""".split()
 
 constituent_macros = {
     'V'  : 'VB VBD VBG VBN VBP VBZ'.split(),
@@ -21,14 +21,14 @@ class RuleParser:
 
 
     def __init__(self):
-        nonums = alphas + '.!?$_§@'
+        nonums = alphas + '.!?$_§@,;'
         singel_constraint_value = Word(alphanums).setResultsName('value')
 
         constraint_value = Group(
             singel_constraint_value |
             Suppress('{')
                 + singel_constraint_value
-                + ZeroOrMore(Suppress(',') + singel_constraint_value)
+                + ZeroOrMore(Suppress('|') + singel_constraint_value)
                 + Suppress('}')
         ).setResultsName('value_set')
 
@@ -41,7 +41,7 @@ class RuleParser:
         constraint_list = Group(
             Suppress('[')
             + constraint
-            + ZeroOrMore(Suppress(',') + constraint)
+            + ZeroOrMore(Suppress('|') + constraint)
             + Suppress(']')
         ).setResultsName('constraints_list')
 
@@ -63,7 +63,7 @@ class RuleParser:
             + Suppress(oneOf('-> -'))
             + Word(nonums + nums).setResultsName('right')
             ).setResultsName('relation')
-        relation_list = Group(relation + ZeroOrMore(Suppress(',') + relation)).setResultsName('relation_list')
+        relation_list = Group(relation + ZeroOrMore(relation)).setResultsName('relation_list')
 
         transformation = Word(nonums + nums).setResultsName('transformation')
 
