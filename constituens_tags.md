@@ -84,12 +84,12 @@
 
 **-DTV (dative)** - marks the dative object in the unshifted form of the double object construction. If the preposition introducing the "dative" object is for, it is considered benefactive (-BNF). -DTV (and -BNF) is only used after verbs that can undergo dative shift.<br />
 **-LGS** (logical subject) - is used to mark the logical subject in passives. It attaches to the NP object of by and not to the PP node itself.<br />
-**-PRD (predicate)** - marks any predicate that is not VP. In the do so construction, the so is annotated as a predicate.
-**-PUT** - marks the locative complement of put. 
+**-PRD (predicate)** - marks any predicate that is not VP. In the do so construction, the so is annotated as a predicate.<br />
+**-PUT** - marks the locative complement of put.<br />
 **-SBJ (surface subject)** - marks the structural surface subject of both matrix and embedded clauses, including those with null subjects.<br />
-**-TPC ("topicalized")** - marks elements that appear before the subject in a declarative sentence, but in two cases only:
-if the front element is associated with a *T* in the position of the gap.<br />
-if the fronted element is left-dislocated (i.e. it is associated with a resumptive pronoun in the position of the gap).<br />
+**-TPC ("topicalized")** - marks elements that appear before the subject in a declarative sentence, but in two cases only:<br />
+ - if the front element is associated with a *T* in the position of the gap.
+ - if the fronted element is left-dislocated (i.e. it is associated with a resumptive pronoun in the position of the gap).
 **-VOC (vocative)** - marks nouns of address, regardless of their position in the sentence. It is not coindexed to the subject and not get -TPC when it is sentence-initial.<br />
 
 
@@ -102,7 +102,7 @@ Adverbials are generally VP adjuncts.
 **-DIR (direction)** - marks adverbials that answer the questions "from where?" and "to where?" It implies motion, which can be metaphorical as in "...rose 5 pts. to 57-1/2" or "increased 70% to 5.8 billion yen" -DIR is most often used with verbs of motion/transit and financial verbs.<br />
 **-EXT (extent)** - marks adverbial phrases that describe the spatial extent of an activity. -EXT was incorporated primarily for cases of movement in financial space, but is also used in analogous situations elsewhere. Obligatory complements do not receive -EXT. Words such as fully and completely are absolutes and do not receive -EXT. <br />
 **-LOC (locative)** - marks adverbials that indicate place/setting of the event. -LOC may also indicate metaphorical location. There is likely to be some varation in the use of -LOC due to differing annotator interpretations. In cases where the annotator is faced with a choice between -LOC or -TMP, the default is -LOC. In cases involving SBAR, SBAR should not receive -LOC. -LOC has some uses that are not adverbial, such as with place names that are adjoined to other NPs and NAC-LOC premodifiers of NPs. The special tag -PUT is used for the locative argument of put.<br />
-**-MNR (manner)** - marks adverbials that indicate manner, including instrument phrases.
+**-MNR (manner)** - marks adverbials that indicate manner, including instrument phrases.<br />
 **-PRP (purpose or reason)** - marks purpose or reason clauses and PPs.<br />
 **-TMP (temporal)** - marks temporal or aspectual adverbials that answer the questions when, how often, or how long. It has some uses that are not strictly adverbial, auch as with dates that modify other NPs at S- or VP-level. In cases of apposition involving SBAR, the SBAR should not be labeled -TMP. Only in "financialspeak," and only when the dominating PP is a PP-DIR, may temporal modifiers be put at PP object level. Note that -TMP is not used in possessive phrases. <br />
 
