@@ -1,0 +1,12 @@
+digraph{
+rankdir=LR
+{rank=same; N2 N4}
+N1 [ label=<<B>NP<SUB>1</SUB></B>> shape=none ]
+N2 [ label=<<B>V</B>> shape=none ]
+N3 [ label=<<B>NP<SUB>2</SUB></B>> shape=none ]
+N4 [ label=<<B>IN</B>>, shape=none ]
+N5 [ label=<<B>NN</B>>, shape=none ]
+N6 [ label=<<B>DT</B>>, shape=none ]
+N1 -> N2 -> N3
+N6-> N5 -> N4 -> N2
+}

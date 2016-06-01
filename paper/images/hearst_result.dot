@@ -1,0 +1,11 @@
+digraph{
+rankdir=LR
+compound=true
+N3011277964 [ label="pythons", shape=ellipse ]
+N3011277772 [ label="snakes", shape=ellipse ]
+N3011278028 [ label="cobras", shape=ellipse ]
+N3011278124 [ label="boas", shape=ellipse ]
+N3011277964 -> N3011277772
+N3011278028 -> N3011277772
+N3011278124 -> N3011277772
+}

@@ -1,0 +1,15 @@
+digraph{
+rankdir=LR
+compound=true
+subgraph cluster3011481100{
+  N3011507116 [ label="bob", shape=ellipse ]
+  N3011507276 [ label="said", shape=parallelogram ]
+}
+subgraph cluster3011507372{
+  N3011507436 [ label="lara", shape=ellipse ]
+  N3011507468 [ label="smokes", shape=parallelogram ]
+}
+N3011507116 -> N3011507276
+N3011507436 -> N3011507468
+N3011507276 -> N3011507436 [ lhead=cluster3011507372 ]
+}

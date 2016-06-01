@@ -1,4 +1,4 @@
-  %% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+	%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[english]{article}
 \usepackage[utf8]{inputenc}
@@ -90,8 +90,11 @@ parse tree.
 
 A phrase structure parse tree captures the a 
 
+In case the reader is unfamiliar with the abbreviation used for constituents, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}
 
-\paragraph{Terminology}
+
+\section{Purpose (What does it?)}
+...
 
 \section{Language Features}
 A program in the Domain-Specific Language consists of a list of rules. Each rule consists of four parts (root-pattern, pattern, relations and transformations), each separated by a collon: 
@@ -117,23 +120,35 @@ The predicate part defines the semantic relations between the matched
 strings. 
 
 \paragraph{Macros}{
-  Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
+	Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
 
-  \begin{lstlisting}
-    V  = {VB, VBD, VBG, VBN, VBP, VBZ}
-    N  = {NN, NNS, NNP, NNPS, PRP}
-    W  = {WHADJP, WHAVP, WHNP, WHPP}
-    SS = {S, SBAR, SBARQ, SINV, SQ}
-    J  = {JJ, JJR, JJS}
-  \end{lstlisting}
+	\begin{lstlisting}
+		V  = {VB, VBD, VBG, VBN, VBP, VBZ}
+		N  = {NN, NNS, NNP, NNPS, PRP}
+		W  = {WHADJP, WHAVP, WHNP, WHPP}
+		SS = {S, SBAR, SBARQ, SINV, SQ}
+		J  = {JJ, JJR, JJS}
+	\end{lstlisting}
 
-  With \lstinline{V} standing for verbs, \lstinline{N} for nouns, \lstinline{W} for questions, \lstinline{SS} for sentences and \lstinline{J} for adjectives. They can be used just as other variables. 
+	With \lstinline{V} standing for verbs, \lstinline{N} for nouns, \lstinline{W} for questions, \lstinline{SS} for sentences and \lstinline{J} for adjectives. They can be used just as other variables. 
 }
 
 \paragraph{Property matching}
 Matching of other properties than 'terminal' or 'label' is expressed in squared brackets after the variable name. Write a variable name and a value separated by an equal sign to check if a node has a property with that name and value. The expression \lstinline{N[ner=person]} matches nouns with the NER-tag 'person'. Write only the variable name to check if a node has a propertry with that name. \lstinline{J[color]} matches adjectives with the property 'color'. Multiple constraints are separeted by a comma: \lstinline{N[ner=person | gender=female]}.
 The right hand side of a property constraint can also be a set values. In this case a constitiuent must have one of these properties to match. Example: \lstinline|DT[terminal={an,a}]| - matches a determiner with terminal 'a' or 'an'.
 
+\paragraph{Multiple and Optional parsing}
+Variables defined in pattern can occure multiple times to match multiple constituents. The relations defind for that variable are consequently applied to all matches. Example: The rule \lstinline{S : N V and V . : N-V : S} 
+contains two time the variable \lstinline{V}. The rule applied to "Hanna walks and talks." will match 'walks' as well as 'talks' for \lstinline{V}. So the relation \lstinline{N-V} is formed two times, resulting in: (Hanna)$\rightarrow$ [walks], and (Hanna)$\rightarrow$ [talks].
+Three postfix operators, inspiered by regular expressions, can be added to the end of a pattern token, to make the match optional or repetitive. Multiple nodes assigned to a variable are handled in same way as before.
+
+\begin{tabular}{cll}
+	$\mathbf{?}$ & optional & match once or do not match\\
+	$+$ & mutliple & match at least once\\
+	$*$ & multinal & match arbitrary times (inlcuding: do not match)
+\end{tabular}
+
+Example: \lstinline{NP : DT? J* N : J-N : N} matches a noun with or with or without a preceding determiner and arbitrary adjectives.
 
 
 \paragraph{Cluster references}
@@ -145,10 +160,10 @@ If a sentence contains a dependent clause, one part of the sentence referece to 
 \includegraphics[width=.5\linewidth]{cluster_reference_parsetree}
 
 \lstset{
-  %caption=Descriptive Caption Text,
-  numbers=left,
-  frame=tb,
-  xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
+	%caption=Descriptive Caption Text,
+	numbers=left,
+	frame=tb,
+	xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
 } 
 
 \begin{lstlisting}
@@ -172,9 +187,9 @@ For some sentences it is desireable to let a node point to multiple other nodes.
 \includegraphics[width=.5\linewidth]{headsplit_parsetree}
 
 \lstset{
-  %caption=Descriptive Caption Text, 
-  frame=tb,
-  xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
+	%caption=Descriptive Caption Text, 
+	frame=tb,
+	xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
 }
 
 \begin{lstlisting}
@@ -192,7 +207,7 @@ For some sentences it is desireable to let a node point to multiple other nodes.
 In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
 
 \begin{lstlisting}
-  S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
+	S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 \end{lstlisting}
 
 
@@ -201,10 +216,10 @@ In predicate mode the relations part of a rule will define predicates instead of
 1 parse sentence
 2 create property tree from parsetree
 3 for each rule
-  3.1 find subtrees where root node matches head constraints
-  3.2 for each subtree
-    3.2.1 find nodes without preceding nodes
-    3.2.2 for each node match pattern
+	3.1 find subtrees where root node matches head constraints
+	3.2 for each subtree
+		3.2.1 find nodes without preceding nodes
+		3.2.2 for each node match pattern
 
 \subsection{Matching}
 
@@ -221,29 +236,44 @@ on a constituent, a pattern gets assigned to that constituent.
 parsetree $\leftarrow$ parse(sentence)
 
 \ForEach{rule}{
-  (head, pattern, predicates) $\leftarrow$ rule
-  
-  subtrees $\leftarrow$ nodes of parsetree that satisfy head-condition
-  
-  \ForEach{$subtree$}{
-    matches $\leftarrow$ match(pattern, subtree)
-    
-    construct\_relations(matches, predictates)
-  }
+	(head, pattern, predicates) $\leftarrow$ rule
+	
+	subtrees $\leftarrow$ nodes of parsetree that satisfy head-condition
+	
+	\ForEach{$subtree$}{
+		matches $\leftarrow$ match(pattern, subtree)
+		
+		construct\_relations(matches, predictates)
+	}
 
 }
 
 \end{algorithm}
 
+\section{Step-by-Step Example}
 
+\includegraphics[width=.6\linewidth]{step_example_parsetree}
+
+\begin{lstlisting}
+ S  : NP VP .  : NP-VP      : S
+ VP : V  NP PP : V-NP  PP-V : V
+ PP : IN DT N  : DT-N  N-IN : IN 
+ DT : a :: indefinite
+\end{lstlisting}
 
 \begin{sidewaystable}
-    \centering
-    \caption{Your caption here}
-   \begin{tabular}{ll}
-    First First & First Second\\
-    Second First & Second Second
-    \end{tabular}
+	\centering
+	\caption{Step by step}
+	\begin{tabular}{l|l|l}
+		Pattern Match & Graph with Constituent labels & Graph with terminal labels \\ \hline
+
+		Second First & \textbf{NP\textsubscript{1}} $\rightarrow$ \textbf{VP} &
+		\includegraphics[width=.5\linewidth]{example_step1}\\ \hline
+
+		& & \includegraphics[width=.5\linewidth]{example_step2}\\ \hline
+		& & \includegraphics[width=.5\linewidth]{example_step3}\\ \hline
+		& & \includegraphics[width=.5\linewidth]{example_step4}\\ \hline
+	\end{tabular}
 \end{sidewaystable}
 
 
@@ -267,8 +297,7 @@ Since multiple and optional matching is not yet implemented, here is a version w
 \mathtt{NP\ :\ N0\ such\ as\ N1\ ,\ N2\ ,\ CC\ N3\ :\ N1\text{--}N0\ N2\text{--}N0\ N3\text{--}N0\ :\ N0}
 \]
 
-Applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles."
-, this rule results in the three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
+Applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles.", this rule results in the three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
 
 \section{Conclusion}
 
