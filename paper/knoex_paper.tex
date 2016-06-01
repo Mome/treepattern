@@ -267,12 +267,21 @@ parsetree $\leftarrow$ parse(sentence)
 	\begin{tabular}{l|l|l}
 		Pattern Match & Graph with Constituent labels & Graph with terminal labels \\ \hline
 
-		Second First & \textbf{NP\textsubscript{1}} $\rightarrow$ \textbf{VP} &
-		\includegraphics[width=.5\linewidth]{example_step1}\\ \hline
+		Second First &
+		\includegraphics[width=.5\linewidth]{step_example_raw_1} &
+		\includegraphics[width=.5\linewidth]{step_example_1}\\ \hline
 
-		& & \includegraphics[width=.5\linewidth]{example_step2}\\ \hline
-		& & \includegraphics[width=.5\linewidth]{example_step3}\\ \hline
-		& & \includegraphics[width=.5\linewidth]{example_step4}\\ \hline
+		&
+		\includegraphics[width=.5\linewidth]{step_example_raw_2} &
+		\includegraphics[width=.5\linewidth]{step_example_2}\\ \hline
+
+		&
+		\includegraphics[width=.5\linewidth]{step_example_raw_3}&
+		\includegraphics[width=.5\linewidth]{step_example_3}\\ \hline
+
+		&
+		\includegraphics[width=.5\linewidth]{step_example_raw_4}&
+		\includegraphics[width=.5\linewidth]{step_example_4}\\ \hline
 	\end{tabular}
 \end{sidewaystable}
 
@@ -291,13 +300,13 @@ Expressed in the DSL this looks like:
 \mathtt{NP\ :\ NP0\ such\ as\ ((N ,)+\ ,\ \{and|or\})?\ N : N\text{--}NP0 : NP0}
 \]
 
-Since multiple and optional matching is not yet implemented, here is a version without these advanced features, that will match exaclty three nouns after 'such as':
+Since multiple and optional matching is not yet implemented, here is a version without these advanced features, that will match exactly three nouns after 'such as':
 
 \[
 \mathtt{NP\ :\ N0\ such\ as\ N1\ ,\ N2\ ,\ CC\ N3\ :\ N1\text{--}N0\ N2\text{--}N0\ N3\text{--}N0\ :\ N0}
 \]
 
-Applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles.", this rule results in the three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
+This rule applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles.", results in three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
 
 \section{Conclusion}
 

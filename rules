@@ -1,6 +1,6 @@
 #NP : N0 such as N1 , N2 , CC N3 : N1-N0 N2-N0 N3-N0 : N0
 
-#S  : NP VP .  : NP-VP      : S
-#VP : V  NP PP : V-NP  PP-V : V
-#PP : IN DT N  : DT-N  N-IN : IN 
+S  : NP VP .  : NP-VP      : S
+VP : V  NP PP : V-NP  PP-V : V
+PP : IN DT N  : DT-N  N-IN : IN 
 DT : a :: indefinite
