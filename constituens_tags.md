@@ -1,7 +1,7 @@
 # List of Constituent Tags
 
 
-## Clause / Sentence Level
+### Clause / Sentence Level
 
 **S** - simple declarative clause, i.e. one that is not introduced by a (possible empty) subordinating conjunction or a wh-word and that does not exhibit subject-verb inversion.<br />
 **SBAR** - Clause introduced by a (possibly empty) subordinating conjunction.<br />
@@ -9,7 +9,7 @@
 **SINV** - Inverted declarative sentence, i.e. one in which the subject follows the tensed verb or modal.<br />
 **SQ** - Inverted yes/no question, or main clause of a wh-question, following the wh-phrase in SBARQ.<br />
 
-## Phrase Level
+### Phrase Level
 
 **ADJP** - Adjective Phrase.<br />
 **ADVP** - Adverb Phrase.<br />
@@ -34,7 +34,7 @@
 **X** - Unknown, uncertain, or unbracketable. X is often used for bracketing typos and in bracketing the...the-constructions.<br />
 
 
-## Word Level
+### Word Level
 
 **CC** - Coordinating conjunction<br />
 **CD** - Cardinal number<br />
@@ -74,13 +74,13 @@
 **WRB** - Wh-adverb<br />
 
 
-## Form/function discrepancies
+### Form/function discrepancies
 
--ADV (adverbial) - marks a constituent other than ADVP or PP when it is used adverbially (e.g. NPs or free ("headless" relatives). However, constituents that themselves are modifying an ADVP generally do not get -ADV. If a more specific tag is available (for example, -TMP) then it is used alone and -ADV is implied. See the Adverbials section.
--NOM (nominal) - marks free ("headless") relatives and gerunds when they act nominally.
+**-ADV (adverbial)** - marks a constituent other than ADVP or PP when it is used adverbially (e.g. NPs or free ("headless" relatives). However, constituents that themselves are modifying an ADVP generally do not get -ADV. If a more specific tag is available (for example, -TMP) then it is used alone and -ADV is implied. See the Adverbials section.<br />
+**-NOM (nominal)** - marks free ("headless") relatives and gerunds when they act nominally.<br />
 
 
-## Grammatical role
+### Grammatical role
 
 **-DTV (dative)** - marks the dative object in the unshifted form of the double object construction. If the preposition introducing the "dative" object is for, it is considered benefactive (-BNF). -DTV (and -BNF) is only used after verbs that can undergo dative shift.<br />
 **-LGS** (logical subject) - is used to mark the logical subject in passives. It attaches to the NP object of by and not to the PP node itself.<br />
@@ -93,7 +93,7 @@ if the fronted element is left-dislocated (i.e. it is associated with a resumpti
 **-VOC (vocative)** - marks nouns of address, regardless of their position in the sentence. It is not coindexed to the subject and not get -TPC when it is sentence-initial.<br />
 
 
-##  Adverbials
+### Adverbials
 
 Adverbials are generally VP adjuncts.
 
@@ -106,19 +106,19 @@ Adverbials are generally VP adjuncts.
 **-PRP (purpose or reason)** - marks purpose or reason clauses and PPs.<br />
 **-TMP (temporal)** - marks temporal or aspectual adverbials that answer the questions when, how often, or how long. It has some uses that are not strictly adverbial, auch as with dates that modify other NPs at S- or VP-level. In cases of apposition involving SBAR, the SBAR should not be labeled -TMP. Only in "financialspeak," and only when the dominating PP is a PP-DIR, may temporal modifiers be put at PP object level. Note that -TMP is not used in possessive phrases. <br />
 
-## Miscellaneous
+### Miscellaneous
 
 **-CLR (closely related)** - marks constituents that occupy some middle ground between arguments and adjunct of the verb phrase. These roughly correspond to "predication adjuncts", prepositional ditransitives, and some "phrasel verbs". Although constituents marked with -CLR are not strictly speaking complements, they are treated as complements whenever it makes a bracketing difference. The precise meaning of -CLR depends somewhat on the category of the phrase.<br />
 **on S or SBAR** - These categories are usually arguments, so the -CLR tag indicates that the clause is more adverbial than normal clausal arguments. The most common case is the infinitival semi-complement of use, but there are a variety of other cases.<br />
 **on PP, ADVP, SBAR-PRP, etc** - On categories that are ordinarily interpreted as (adjunct) adverbials, -CLR indicates a somewhat closer relationship to the verb. For example:<br />
 
-## Prepositional Ditransitives
+### Prepositional Ditransitives
 In order to ensure consistency, the Treebank recognizes only a limited class of verbs that take more than one complement (-DTV and -PUT and Small Clauses) Verbs that fall outside these classes (including most of the prepositional ditransitive verbs in class [D2]) are often associated with -CLR.
 
-## Phrasal verbs
+### Phrasal verbs
 Phrasal verbs are also annotated with -CLR or a combination of -PRT and PP-CLR. Words that are considered borderline between particle and adverb are often bracketed with ADVP-CLR.
 
-## Predication Adjuncts
+### Predication Adjuncts
 
 Many of Quirk's predication adjuncts are annotated with -CLR.
 
