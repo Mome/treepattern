@@ -36,77 +36,42 @@
 
 ## Word Level
 
-CC - Coordinating conjunction
-
-CD - Cardinal number
-
-DT - Determiner
-
-EX - Existential there
-
-FW - Foreign word
-
-IN - Preposition or subordinating conjunction
-
-JJ - Adjective
-
-JJR - Adjective, comparative
-
-JJS - Adjective, superlative
-
-LS - List item marker
-
-MD - Modal
-
-NN - Noun, singular or mass
-
-NNS - Noun, plural
-
-NNP - Proper noun, singular
-
-NNPS - Proper noun, plural
-
-PDT - Predeterminer
-
-POS - Possessive ending
-
-PRP - Personal pronoun
-
-PRP$ - Possessive pronoun (prolog version PRP-S)
-
-RB - Adverb
-
-RBR - Adverb, comparative
-
-RBS - Adverb, superlative
-
-RP - Particle
-
-SYM - Symbol
-
-TO - to
-
-UH - Interjection
-
-VB - Verb, base form
-
-VBD - Verb, past tense
-
-VBG - Verb, gerund or present participle
-
-VBN - Verb, past participle
-
-VBP - Verb, non-3rd person singular present
-
-VBZ - Verb, 3rd person singular present
-
-WDT - Wh-determiner
-
-WP - Wh-pronoun
-
-WP$ - Possessive wh-pronoun (prolog version WP-S)
-
-WRB - Wh-adverb
+**CC** - Coordinating conjunction<br />
+**CD** - Cardinal number<br />
+**DT** - Determiner<br />
+**EX** - Existential there<br />
+**FW** - Foreign word<br />
+**IN** - Preposition or subordinating conjunction<br />
+**JJ** - Adjective<br />
+**JJR** - Adjective, comparative<br />
+**JJS** - Adjective, superlative<br />
+**LS** - List item marker<br />
+**MD** - Modal<br />
+**NN** - Noun, singular or mass<br />
+**NNS** - Noun, plural<br />
+**NNP** - Proper noun, singular<br />
+**NNPS** - Proper noun, plural<br />
+**PDT** - Predeterminer<br />
+**POS** - Possessive ending<br />
+**PRP** - Personal pronoun<br />
+**PRP$** - Possessive pronoun (prolog version PRP-S)<br />
+**RB** - Adverb<br />
+**RBR** - Adverb, comparative<br />
+**RBS** - Adverb, superlative<br />
+**RP** - Particle<br />
+**SYM** - Symbol<br />
+**TO** - to<br />
+**UH** - Interjection<br />
+**VB** - Verb, base form<br />
+**VBD** - Verb, past tense<br />
+**VBG** - Verb, gerund or present participle<br />
+**VBN** - Verb, past participle<br />
+**VBP** - Verb, non-3rd person singular present<br />
+**VBZ** - Verb, 3rd person singular present<br />
+**WDT** - Wh-determiner<br />
+**WP** - Wh-pronoun<br />
+**WP$** - Possessive wh-pronoun (prolog version WP-S)<br />
+**WRB** - Wh-adverb<br />
 
 
 ## Form/function discrepancies
