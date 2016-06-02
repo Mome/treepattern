@@ -13,6 +13,7 @@
 \usepackage{tgcursor}
 \usepackage{glossaries}
 \usepackage{rotating}
+\usepackage{adjustbox}
 
 \graphicspath{ {images/} }
 \lstset{basicstyle=\ttfamily}
@@ -28,9 +29,7 @@
 
 \section{Introduction}
 
-Due to the imense complexity and ambiguity of human language, Information
-extraction (IE) from written natural language remains an unsolved
-problem.
+Due to the imense complexity and ambiguity of human language, Information extraction (IE) from written natural language remains an unsolved problem.
 
 , which aimed to extract acestor\textbackslash{}
 :\textbackslash{} pattern\textbackslash{} :\textbackslash{} predicates\textbackslash{}
@@ -40,15 +39,8 @@ designed to harness the information of phrase structure (or constituent)
 parse trees. The DSL (Domain-Specific Language) to define the patterns
 is designed to 
 
+This paper describes a method to extract relations from a representation that incorporate information of various sources. This relations may be visialized in a conceptual graph or fed into an ontology or database.
 
-\paragraph{Motivation}
-Natural language can be seen as a \textit{serialization of thought}. In order to communicate, the sender encodes a part of his mental content into a one-dimensional representation and transmits it to the receiver who retranslates it into his own mental representation. Words that refere to entites are hereby set into relation to other concepts or entities, which can happen in arbitrary convoluted ways. Adjectives can add properties to entities, which are expressed by a noun. Prepositional clauses may modify a process or action denoted by a verb. Same words can have different meanings. Word endings contain infomation about tense or number.
-
-Most of these combinations happen from a local to a global scale: Two adjacent words refere to an entity, a chunk of some other words may refer to something else, a chunking of them again may express a process or relation. Thus it comes natural to see a hierachical structure within each sentence. Constituency-based parse trees (or phrase-structure parse trees) are a natural way to assign a hieracical structure to a sentence. Despite beeing a syntactic method, constituency-based parse trees contain a lot explicite semantic information. Some constituents refer to a single entity or concept, others express relations between concepts.
-
-Computational linguistics possesses various other methods to recognize properties of single words within a sentence, which provide information about undelying properties, entities and relations. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories. The aim of this paper it to develop a method to incorporate information of words or chunks to extract predicates that can be feed into a database or ontology.
-
- 
 \paragraph{Related Work}
 
 The possibly best known example for pattern matching in words and
@@ -78,6 +70,25 @@ axis \textit{preceding} and \textit{following} nodes can be matched.
 If a preceding or following also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
+\paragraph{Motivation}
+
+If we consider natural language as a \textit{serialation of thought} that is decoded and encoded by humans in order to communicate and if we define a formal language that can partially express mental content, than there must be a methods that can partially map natural language to our formal language. Furthermore we can see that natural lanuge has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
+Phrase-structure grammars are a common way assign a hierachical structure of constituents to a sentence. They are context-free grammars that yield a parse tree with words as terminal symboles and nodes refering to constituentns of the sentence. Despite beeing a syntactic method, phrase-structure parse trees also carry semantic information. Constituents can refer to entities or concepts, others express relations between concepts.
+Computational linguistics possesses various other isolated methods to provide information about the parts of a sentence. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories.
+
+
+\pragraph{Funktionsweise}
+In the first step the algorithm creates a representation of the sententence structure, called the \textit{property-tree}, that incorporates diffenrent sources of information. I is based on the phrase-structure parse tree with additional propertries assigned to the nodes of the tree, which I will just refere to as constituents from here on. For example if the named-entity of a word is 'person', a new variable with the name 'ner' and that value is created and assigned to the corresponding constituent.
+In the second step a set of rules defines the way how certain configurations of constituents is translated into semantic domain. A rule consists of four parts, each separated by a collon: 
+
+\[
+\mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformations}
+\] 
+
+The root-pattern specifies constrains for a contituent, that forms the root node of subtree within the property tree. 
+ 
+
+
 \paragraph{Problem}
 
 Pattern matching in tagged or parsed corpora is a common technique
@@ -92,9 +103,6 @@ A phrase structure parse tree captures the a
 
 In case the reader is unfamiliar with the abbreviation used for constituents, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}
 
-
-\section{Purpose (What does it?)}
-...
 
 \section{Language Features}
 A program in the Domain-Specific Language consists of a list of rules. Each rule consists of four parts (root-pattern, pattern, relations and transformations), each separated by a collon: 
@@ -123,11 +131,11 @@ strings.
 	Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
 
 	\begin{lstlisting}
-		V  = {VB, VBD, VBG, VBN, VBP, VBZ}
-		N  = {NN, NNS, NNP, NNPS, PRP}
-		W  = {WHADJP, WHAVP, WHNP, WHPP}
-		SS = {S, SBAR, SBARQ, SINV, SQ}
-		J  = {JJ, JJR, JJS}
+  V  = {VB, VBD, VBG, VBN, VBP, VBZ}
+  N  = {NN, NNS, NNP, NNPS, PRP}
+  W  = {WHADJP, WHAVP, WHNP, WHPP}
+  SS = {S, SBAR, SBARQ, SINV, SQ}
+  J  = {JJ, JJR, JJS}
 	\end{lstlisting}
 
 	With \lstinline{V} standing for verbs, \lstinline{N} for nouns, \lstinline{W} for questions, \lstinline{SS} for sentences and \lstinline{J} for adjectives. They can be used just as other variables. 
@@ -182,32 +190,25 @@ VP : V  SS    : V-SS  : V
 \paragraph{Head Splitting}
 For some sentences it is desireable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
 
-\begin{figure}
-\centering
+
 \includegraphics[width=.5\linewidth]{headsplit_parsetree}
 
-\lstset{
-	%caption=Descriptive Caption Text, 
-	frame=tb,
-	xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
-}
-
-\begin{lstlisting}
+\begin{lstlisting}[frame=tb, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth]
  SS : NP VP . : NP-VP : SS
  VP : VP1 CC VP2 :: VP1 VP2 
 \end{lstlisting}
 
 \includegraphics[width=.3\linewidth]{headsplit_graph}
 
-\caption{Head Splitting: The rules in the middle applied to the parsetree on the top yield to the graph in the bottom.}
-\end{figure}
+Head Splitting: The rules in the middle applied to the parsetree on the top yield to the graph in the bottom.
+
 
 
 \paragraph{Predicate Mode}
 In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
 
 \begin{lstlisting}
-	S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
+S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 \end{lstlisting}
 
 
@@ -245,9 +246,7 @@ parsetree $\leftarrow$ parse(sentence)
 		
 		construct\_relations(matches, predictates)
 	}
-
 }
-
 \end{algorithm}
 
 \section{Step-by-Step Example}
@@ -262,27 +261,42 @@ parsetree $\leftarrow$ parse(sentence)
 \end{lstlisting}
 
 \begin{sidewaystable}
+
 	\centering
-	\caption{Step by step}
-	\begin{tabular}{l|l|l}
-		Pattern Match & Graph with Constituent labels & Graph with terminal labels \\ \hline
+	\caption{Step by step application of the rules.}
+	\begin{tabular}{|c|c|c|}
+	  \hline  
+		Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline	
 
-		Second First &
-		\includegraphics[width=.5\linewidth]{step_example_raw_1} &
-		\includegraphics[width=.5\linewidth]{step_example_1}\\ \hline
+		\begin{tabular}{c||c|c|c}
+			$\mathtt{S}$ & $\mathtt{NP}$ & $\mathtt{V}$ & . \\ \hline
+			\textbf{S} & \textbf{NP}\textsubscript{1} & \textbf{V} & \textbf{.} 
+		\end{tabular} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_1}} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_1}} \\ \hline
 
-		&
-		\includegraphics[width=.5\linewidth]{step_example_raw_2} &
-		\includegraphics[width=.5\linewidth]{step_example_2}\\ \hline
+		\begin{tabular}{c||c|c|c}
+			$\mathtt{VP}$ & $\mathtt{V}$ & $\mathtt{NP}$ & $\mathtt{PP}$ \\ \hline
+			\textbf{VP} & \textbf{VBP} & \textbf{NP}\textsubscript{2} & \textbf{PP}
+		\end{tabular} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_2}} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_2}}\\ \hline
 
-		&
-		\includegraphics[width=.5\linewidth]{step_example_raw_3}&
-		\includegraphics[width=.5\linewidth]{step_example_3}\\ \hline
+		\begin{tabular}{c||c|c|c}
+			$\mathtt{PP}$ & $\mathtt{IN}$ & $\mathtt{DT}$ & $\mathtt{N}$  \\ \hline
+			\textbf{PP} & \textbf{IN} & \textbf{DT}  & \textbf{NN} 
+		\end{tabular} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_3}}&
+		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_3}}\\ \hline
 
-		&
-		\includegraphics[width=.5\linewidth]{step_example_raw_4}&
-		\includegraphics[width=.5\linewidth]{step_example_4}\\ \hline
+		\begin{tabular}{c||c}
+			$\mathtt{DT}$ & $\mathtt{a}$ \\ \hline
+			\textbf{DT} & a
+		\end{tabular} &
+		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
+		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
 	\end{tabular}
+
 \end{sidewaystable}
 
 

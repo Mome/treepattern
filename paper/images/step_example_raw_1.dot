@@ -1,6 +1,6 @@
 digraph{
 rankdir=LR
 N1 [ label=<<B>NP<SUB>1</SUB></B>> shape=none ]
-N2 [ label=<B>VP</B>, shape=none ]
+N2 [ label=<<B>VP</B>>, shape=none ]
 N1 -> N2
 }

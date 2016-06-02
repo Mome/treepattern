@@ -1,14 +1,16 @@
 digraph{
 rankdir=LR
 compound=true
-subgraph cluster3011530028{
-  N3011551980 [ label="i", shape=ellipse ]
-  N3011552076 [ label="saw", shape=parallelogram ]
-  N3011552140 [ label="bob", shape=ellipse ]
-  N3011552268 [ label="with", shape=polygon ]
-  N0 [ label="indefinite", shape=ellipse ]
-  N3011552396 [ label="binocular", shape=ellipse ]
-}
+
+{rank=same; N3011552268 N3011552076}
+
+N3011551980 [ label="I", shape=ellipse ]
+N3011552076 [ label="see", shape=parallelogram ]
+N3011552140 [ label="Bob", shape=ellipse ]
+N3011552268 [ label="with", shape=polygon ]
+N0 [ label="indefinite", shape=ellipse ]
+N3011552396 [ label="binocular", shape=ellipse ]
+
 N3011551980 -> N3011552076
 N3011552076 -> N3011552140
 N3011552268 -> N3011552076
