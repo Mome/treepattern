@@ -1,4 +1,5 @@
 from itertools import takewhile, islice, dropwhile
+from math import ceil, floor
 
 class IteratorTree:
     def __init__(self, parent=None, children=None):
@@ -166,4 +167,55 @@ class PropertyTree(IteratorTree):
             return name + ' "' + self.terminals + '"'
         inner = ' '.join(str(c) for c in self.children)        
         return ''.join([name, '[ ', inner, ']'])
-    
+
+    def draw_to_ascii(self):
+        lab = 'label' in self.properties
+        ter = 'terminal' in self.properties
+        if not self.children:
+            if lab and ter:
+
+                label = self.properties['label']
+                terminal = '"'+self.properties['terminal']+'"'
+                max_len = max(len(label), len(terminal))
+
+                rmargin = ' '*ceil((max_len-len(label))/2)
+                lmargin = ' '*floor((max_len-len(label))/2)
+                label = rmargin + label + lmargin
+
+                rmargin = ' '*ceil((max_len-len(terminal))/2)
+                lmargin = ' '*floor((max_len-len(terminal))/2)
+                terminal = rmargin + terminal + lmargin
+
+                edge = [' ']*max_len
+                edge[max_len//2] = '|'
+                edge = ''.join(edge)
+
+                out = '\n'.join([label, edge, terminal])
+
+            elif lab:
+                out = self.properties['label']
+            elif ter:
+                out = '"'+self.properties['terminal']+'"'
+            else:
+                out = '?'
+        else:
+            childlabels = [c.draw_to_ascii().split('\n') for c in self.children]
+            
+            # bring to same high
+            max_depth = max(map(len, childlabels))
+            for cl in childlabels:
+                if len(cl) == max_depth:
+                    continue
+                edge = [' ']*max_len
+                edge[max_len//2] = '|'
+                edge = ''.join(edge)
+                while len(cl) < max_depth:
+                    pass
+                
+
+
+
+
+            raise NotImplementedError()
+
+        return out
