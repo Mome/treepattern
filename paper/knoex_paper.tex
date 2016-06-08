@@ -14,6 +14,8 @@
 \usepackage{glossaries}
 \usepackage{rotating}
 \usepackage{adjustbox}
+\usepackage{mdframed}
+\usepackage{pdflscape}
 
 \graphicspath{ {images/} }
 \lstset{basicstyle=\ttfamily}
@@ -44,7 +46,7 @@ In case the reader is unfamiliar with the abbreviation used for constituents, he
 
 \subsection{Motivation}
 
-If we consider natural language as a \textit{serialation of thought} that is decoded and encoded by humans in order to communicate and if we define a formal language that can partially express mental content, than there must be a methods that can partially map natural language to our formal language. Furthermore we can see that natural lanuge has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
+If we consider natural language as a \textit{serialation of thought} that is decoded and encoded by humans in order to communicate and if we define a formal language that can partially express mental content, then there must be a method that can partially map natural language to our formal language. Furthermore we can see that natural lanuge has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
 Phrase-structure grammars are a common way assign a hierachical structure of constituents to a sentence. They are context-free grammars that yield a parse tree with words as terminal symboles and nodes refering to constituentns of the sentence. Despite beeing a syntactic method, phrase-structure parse trees also carry semantic information. Constituents can refer to entities or concepts, others express relations between concepts.
 Computational linguistics possesses various other isolated methods to provide information about the parts of a sentence. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories.
 
@@ -93,6 +95,7 @@ axis \textit{preceding} and \textit{following} nodes can be matched.
 If a preceding or following also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 \begin{figure}
+\centering
 \includegraphics[scale=0.5]{lara_drinks_tea}
 \caption{Phrase-structure parse tree: yellow nodes have no preceding nodes, blue nodes are imidiate followers of 'Lara'.}
 \end{figure}
@@ -204,8 +207,14 @@ VP : V  SS    : V-SS  : V
 \paragraph{Head Splitting}
 For some sentences it is desireable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
 
+\begin{figure}
+\centering
+
+%\textbf{Head Splitting }\par\medskip
 
 \includegraphics[width=.5\linewidth]{headsplit_parsetree}
+
+
 
 \begin{lstlisting}[frame=tb, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth]
  SS : NP VP . : NP-VP : SS
@@ -214,7 +223,12 @@ For some sentences it is desireable to let a node point to multiple other nodes.
 
 \includegraphics[width=.3\linewidth]{headsplit_graph}
 
-Head Splitting: The rules in the middle applied to the parsetree on the top yield to the graph in the bottom.
+\caption{\label{Head Splitting} The rules in the middle applied to the parsetree on the top yield the graph in the bottom.}
+
+\end{figure}
+
+
+
 
 
 
@@ -263,9 +277,23 @@ parsetree $\leftarrow$ parse(sentence)
 }
 \end{algorithm}
 
-\section{Step-by-Step Example}
+\section{Examples}
 
+\subsection{Step-by-Step Example}
+Figure \ref{fig:step-by-step} shows another parsetree together with a set of rules. The process of pattern matching and graph building for each rule is displayed in table \ref{tab:step-by-step}.
+
+
+
+\begin{figure}
+\centering
 \includegraphics[width=.6\linewidth]{step_example_parsetree}
+
+\lstset{
+	%caption=Descriptive Caption Text,
+	numbers=left,
+	frame=tb,
+	xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
+} 
 
 \begin{lstlisting}
  S  : NP VP .  : NP-VP      : S
@@ -274,10 +302,15 @@ parsetree $\leftarrow$ parse(sentence)
  DT : a :: indefinite
 \end{lstlisting}
 
-\begin{sidewaystable}
+\caption{Parsetree and rules for table \ref{tab:step-by-step}}
+\label{fig:step-by-step}
+\end{figure}
 
+\begin{landscape}
+\begin{table}
+	\label{tab:step-by-step}
 	\centering
-	\caption{Step by step application of the rules.}
+	\caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
 	\begin{tabular}{|c|c|c|}
 	  \hline  
 		Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline	
@@ -311,10 +344,11 @@ parsetree $\leftarrow$ parse(sentence)
 		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
 	\end{tabular}
 
-\end{sidewaystable}
+\end{table}
+\end{landscape}
 
 
-\section{Example: Hearst-Pattern}
+\subsection{Example: Hearst-Pattern}
 
 The exact form of the first Hearst-Pattern in its original publication is:
 

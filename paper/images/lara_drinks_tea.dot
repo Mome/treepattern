@@ -1,0 +1,27 @@
+digraph PropTree{
+N139892662811728 [label="S" style=filled fillcolor=gold]
+N139892662811616 [label="NP"  style=filled fillcolor=gold]
+N139892662812232 [label="NNP" style=filled fillcolor=gold]
+T0 [shape=box, label="Lara" style=filled fillcolor=gold]
+N139892662812176 [label="VP" style=filled fillcolor=steelblue]
+N139892662812288 [label="VBZ" style=filled fillcolor=steelblue]
+T1 [shape=box, label="drinks" style=filled fillcolor=steelblue]
+N139892662812344 [label="NP"]
+N139892662812456 [label="NN"]
+T2 [shape=box, label="tea"]
+N139892662812120 [label="."]
+T3 [shape=box, label="."]
+N139892662811728 -> N139892662811616
+N139892662811616 -> N139892662812232
+N139892662812232 -> T0
+N139892662811728 -> N139892662812176
+N139892662812176 -> N139892662812288
+N139892662812288 -> T1
+N139892662812176 -> N139892662812344
+N139892662812344 -> N139892662812456
+N139892662812456 -> T2
+N139892662811728 -> N139892662812120
+N139892662812120 -> T3
+{ rank=same; N139892662812232, N139892662812288, N139892662812456, N139892662812120}
+{ rank=same; T0, T1, T2, T3}
+}
