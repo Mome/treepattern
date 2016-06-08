@@ -22,7 +22,7 @@
 
 \begin{document}
 
-\title{A domain-specific language to transform parse-trees into graph-structures.}
+\title{A domain specific language for graph genenration from parse trees by pattern matching.}
 
 
 \author{Moritz Meier}
@@ -44,12 +44,10 @@ Computational linguistics possesses various other isolated methods to provide in
 
 \subsection{Related Work}
 
-The possibly best known example for pattern matching in words and constituents of a sentence for relation extractions are Hearst-Patterns.
-example Pattern Matching in trees is used in various different contexts.
-Another python package \textit{ptTools }ialso defines a DNS for pattern matching in parse trees, it is however intended to be applied on python parse trees for code analysis and testing. In other cases pattern matching is used to construct dependency parse trees from phrase structure parse tress {[}citation{]}.
-In \cite{rim_transforming_1990} dependency-parse trees are transfored into semantic-graphs.
+Pattern Matching in trees is used in various different contexts. \cite{hoffmann_pattern_1982} is a detailed discussion on pattern matching in programming language parse trees and subtree replacement for such things as code optimization and theorem proving. \cite{rim_transforming_1990} describes a computational method to transform syntactic graphs into semantic ones. The primary function of TGrep \cite{rohde_tgrep2_2004} is to extract parse trees whose structures match a specified pattern. In \cite{de_marneffe_generating_2006} dependency parse trees are generated from phrase structure parse trees.
+The python package \textit{ptTools} defines a DNS for pattern matching in trees, which is intended to be applied on python parse trees for code analysis and testing. Tregex is a tool for tree querying and Tsurgen for tree manipulation \cite{levy_tregex_2006}. In \cite{Creating graphs from dependency parse trees} graphs are created from dependency parse trees.
 
-\subsection{XPath}
+\paragraph{XPath}
 The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following description are respective to XPath 1.0.
 Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined in relative to a node denoted as \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axes there is \textit{preceding} and \textit{preceding-sibling} on the left and \textit{following} and \textit{following-sibling} to the right.
 
@@ -296,47 +294,6 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 }
 \end{algorithm}
 
-
-\IncMargin{1em}
-\begin{algorithm}
-\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
-\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
-\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\Input{A bitmap $Im$ of size $w\times l$}
-\Output{A partition of the bitmap}
-\BlankLine
-\emph{special treatment of the first line}\;
-\For{$i\leftarrow 2$ \KwTo $l$}{
-\emph{special treatment of the first element of line $i$}\;
-\For{$j\leftarrow 2$ \KwTo $w$}{\label{forins}
-\Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
-\Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
-\This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
-\If(\tcp*[h]{O(\Left,\This)==1}){\Left compatible with \This}{\label{lt}
-\lIf{\Left $<$ \This}{\Union{\Left,\This}}
-\lElse{\Union{\This,\Left}}
-}
-\If(\tcp*[f]{O(\Up,\This)==1}){\Up compatible with \This}{\label{ut}
-\lIf{\Up $<$ \This}{\Union{\Up,\This}}
-\tcp{\This is put under \Up to keep tree as flat as possible}\label{cmt}
-\lElse{\Union{\This,\Up}}\tcp*[h]{\This linked to \Up}\label{lelse}
-}
-}
-\lForEach{element $e$ of the line $i$}{\FindCompress{p}}
-}
-\caption{disjoint decomposition}\label{algo_disjdecomp}
-\end{algorithm}\DecMargin{1em}
-
-\subsection{Matching}
-
-The matching works as following: 
-
-\subsection{Graph Building}
-
-Every constituent can be connected to one entity. If a pattern matches
-on a constituent, a pattern gets assigned to that constituent.
-
-\label{sec:algorithm}
 
 
 \section{Examples}
