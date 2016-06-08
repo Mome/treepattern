@@ -1,0 +1,3 @@
+#! /usr/bin/sh
+
+rm *.out *.aux *.log *.pdf *.blg *.bbl *.dvi

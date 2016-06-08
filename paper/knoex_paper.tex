@@ -22,7 +22,7 @@
 
 \begin{document}
 
-\title{A Domain Specific Language for Relation Extraction by Pattern Matching in Parse Trees}
+\title{A domain-specific language to transform parse-trees into graph-structures.}
 
 
 \author{Moritz Meier}
@@ -31,47 +31,36 @@
 
 \section{Introduction}
 
-Due to the imense complexity and ambiguity of human language, Information extraction (IE) from written natural language remains an unsolved problem.
+Due to the imense complexity and ambiguity of human language, information extraction (IE) from written natural language remains an unsolved problem. 
 
-, which aimed to extract acestor\textbackslash{}
-:\textbackslash{} pattern\textbackslash{} :\textbackslash{} predicates\textbackslash{}
-:\textbackslash{} transformationsemantic relations from textual data
-in order to construct an ontology. The algorithm described here, was
-designed to harness the information of phrase structure (or constituent)
-parse trees. The DSL (Domain-Specific Language) to define the patterns
-is designed to 
-
-This paper describes a method to extract relations from a representation that incorporate information of various sources. This relations may be visialized in a conceptual graph or fed into an ontology or database.
-In case the reader is unfamiliar with the abbreviation used for constituents, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}
+The DSL (Domain-Specific Language) and the underlying algorithm, described in the work, was designed to transform a phrase structure parse-tree into a graph of semantic relations. However it can in principle be used on any tree structure to produce other kinds of graph structures. The method also includes that additional propertries can be assigend to nodes of trees such that inforamtion of other sources, common in computational linguistics, can incorporated into on representation. The DSL makes it convinient to define pairs of patterns, that act locally on the tree, and corrisponding transistions to form and transform nodes and edges of a graph.
+In case the reader is unfamiliar with the abbreviation used for constituents, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}.
 
 \subsection{Motivation}
 
-If we consider natural language as a \textit{serialation of thought} that is decoded and encoded by humans in order to communicate and if we define a formal language that can partially express mental content, then there must be a method that can partially map natural language to our formal language. Furthermore we can see that natural lanuge has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
+If we consider natural language as a \textit{serialation of mental content}, which is decoded and encoded by humans in order to communicate. If we also define a formal language that can partially express mental content, than there must be a method which can partially map natural language to the formal language. Furtheron we can see that natural lanuage has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
 Phrase-structure grammars are a common way assign a hierachical structure of constituents to a sentence. They are context-free grammars that yield a parse tree with words as terminal symboles and nodes refering to constituentns of the sentence. Despite beeing a syntactic method, phrase-structure parse trees also carry semantic information. Constituents can refer to entities or concepts, others express relations between concepts.
 Computational linguistics possesses various other isolated methods to provide information about the parts of a sentence. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories.
 
 \subsection{Related Work}
 
-The possibly best known example for pattern matching in words and
-constituents of a sentence for relation extractions are Hearst-Patterns.
+The possibly best known example for pattern matching in words and constituents of a sentence for relation extractions are Hearst-Patterns.
 example Pattern Matching in trees is used in various different contexts.
-One exmaple is the widely used XPath (XML Path Language), which is
-a query language for node selection in XML documents, defined by the
-W3C. Another python package \textit{ptTools }ialso defines a DNS for
-pattern matching in parse trees, it is however intended to be applied
-on python parse trees for code analysis and testing. In other cases
-pattern matching is used to construct dependency parse trees from
-phrase structure parse tress {[}citation{]}.
+Another python package \textit{ptTools }ialso defines a DNS for pattern matching in parse trees, it is however intended to be applied on python parse trees for code analysis and testing. In other cases pattern matching is used to construct dependency parse trees from phrase structure parse tress {[}citation{]}.
+In \cite{rim_transforming_1990} dependency-parse trees are transfored into semantic-graphs.
 
-
+\subsection{XPath}
+The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following description are respective to XPath 1.0.
+Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined in relative to a node denoted as \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axes there is \textit{preceding} and \textit{preceding-sibling} on the left and \textit{following} and \textit{following-sibling} to the right.
 
 
 
 \begin{figure}
 
-\centering{}
+\centering
 \includegraphics[scale=0.6]{pathx_axes}
 \caption{Subset of relationships expressable in XPath}
+\label{fig:xpath}
 
 \end{figure}
 
@@ -229,9 +218,6 @@ For some sentences it is desireable to let a node point to multiple other nodes.
 
 
 
-
-
-
 \paragraph{Predicate Mode}
 In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
 
@@ -250,6 +236,97 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 		3.2.1 find nodes without preceding nodes
 		3.2.2 for each node match pattern
 
+\begin{algorithm}
+\SetAlgoLined
+\SetKwProg{Fn}{Function}{:}{end}
+\SetKwFunction{MatchPattern}{MatchPattern}
+\SetKwFunction{FindMatches}{FindMatches}
+\SetKwData{root}{root}
+\SetKwData{head}{head}
+\SetKwData{pattern}{pattern}
+\SetKw{in}{in}
+
+
+\Fn{\MatchPattern(\root, \head, \pattern)}
+{
+
+	\ForEach{node \in \root.descendant\_or\_self}{
+		\If{node satisfies head constraints}
+		{
+			start\_nodes $\leftarrow$ node.no\_preceding
+
+			assignment $\leftarrow$ empty list of length(pattern)
+
+			matches $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment, index=0)	
+
+			return matches
+		}
+	}
+
+}
+\end{algorithm}
+
+
+\begin{algorithm}
+\SetAlgoLined
+\SetKwProg{Fn}{Function}{:}{end}
+\SetKwFunction{MatchPattern}{MatchPattern}
+\SetKwFunction{FindMatches}{FindMatches}
+\SetKwData{root}{root}
+\SetKwData{head}{head}
+\SetKwData{pattern}{pattern}
+\SetKw{in}{in}
+\Fn{\FindMatches(next\_nodes, pattern, head\_node, variables, index)}
+{
+
+
+	\ForEach{node \in \root.descendant\_or\_self}{
+		\If{node satisfies head constraints}
+		{
+			start\_nodes $\leftarrow$ node.no\_preceding
+
+			assignment $\leftarrow$ empty list of length(pattern)
+
+			matches = $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment)	
+			
+			return matches
+		}
+	}
+
+}
+\end{algorithm}
+
+
+\IncMargin{1em}
+\begin{algorithm}
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{A bitmap $Im$ of size $w\times l$}
+\Output{A partition of the bitmap}
+\BlankLine
+\emph{special treatment of the first line}\;
+\For{$i\leftarrow 2$ \KwTo $l$}{
+\emph{special treatment of the first element of line $i$}\;
+\For{$j\leftarrow 2$ \KwTo $w$}{\label{forins}
+\Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
+\Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
+\This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
+\If(\tcp*[h]{O(\Left,\This)==1}){\Left compatible with \This}{\label{lt}
+\lIf{\Left $<$ \This}{\Union{\Left,\This}}
+\lElse{\Union{\This,\Left}}
+}
+\If(\tcp*[f]{O(\Up,\This)==1}){\Up compatible with \This}{\label{ut}
+\lIf{\Up $<$ \This}{\Union{\Up,\This}}
+\tcp{\This is put under \Up to keep tree as flat as possible}\label{cmt}
+\lElse{\Union{\This,\Up}}\tcp*[h]{\This linked to \Up}\label{lelse}
+}
+}
+\lForEach{element $e$ of the line $i$}{\FindCompress{p}}
+}
+\caption{disjoint decomposition}\label{algo_disjdecomp}
+\end{algorithm}\DecMargin{1em}
+
 \subsection{Matching}
 
 The matching works as following: 
@@ -260,22 +337,7 @@ Every constituent can be connected to one entity. If a pattern matches
 on a constituent, a pattern gets assigned to that constituent.
 
 \label{sec:algorithm}
-\begin{algorithm}
 
-parsetree $\leftarrow$ parse(sentence)
-
-\ForEach{rule}{
-	(head, pattern, predicates) $\leftarrow$ rule
-	
-	subtrees $\leftarrow$ nodes of parsetree that satisfy head-condition
-	
-	\ForEach{$subtree$}{
-		matches $\leftarrow$ match(pattern, subtree)
-		
-		construct\_relations(matches, predictates)
-	}
-}
-\end{algorithm}
 
 \section{Examples}
 
@@ -308,9 +370,7 @@ Figure \ref{fig:step-by-step} shows another parsetree together with a set of rul
 
 \begin{landscape}
 \begin{table}
-	\label{tab:step-by-step}
 	\centering
-	\caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
 	\begin{tabular}{|c|c|c|}
 	  \hline  
 		Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline	
@@ -343,6 +403,8 @@ Figure \ref{fig:step-by-step} shows another parsetree together with a set of rul
 		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
 		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
 	\end{tabular}
+	\caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
+	\label{tab:step-by-step}
 
 \end{table}
 \end{landscape}
@@ -375,7 +437,7 @@ This rule applied to the sentence: "Snakes such as pythons, cobras, and boas are
 \textbf{Acknowledgements.} This work was part of the \textit{Knoex} project (abbr. knowledge
 extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In the current version the postfix operator for optional and multiple matching as well as head-splitting is not implemented.
 
-\bibliography{knoex.bib}{}
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
+\bibliography{knoex.bib}
 
 \end{document}

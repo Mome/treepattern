@@ -1,0 +1,8 @@
+#! /usr/bin/sh
+
+pdflatex knoex_paper
+bibtex knoex
+pdflatex knoex_paper
+pdflatex knoex_paper
+
+
