@@ -1,4 +1,4 @@
-	%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[english]{article}
 \usepackage[utf8]{inputenc}
@@ -16,6 +16,10 @@
 \usepackage{adjustbox}
 \usepackage{mdframed}
 \usepackage{pdflscape}
+\usepackage{verbatim}
+\usepackage{amsthm}
+
+\newtheorem*{definition}{Definition}
 
 \graphicspath{ {images/} }
 \lstset{basicstyle=\ttfamily}
@@ -45,11 +49,24 @@ Computational linguistics possesses various other isolated methods to provide in
 \subsection{Related Work}
 
 Pattern Matching in trees is used in various different contexts. \cite{hoffmann_pattern_1982} is a detailed discussion on pattern matching in programming language parse trees and subtree replacement for such things as code optimization and theorem proving. \cite{rim_transforming_1990} describes a computational method to transform syntactic graphs into semantic ones. The primary function of TGrep \cite{rohde_tgrep2_2004} is to extract parse trees whose structures match a specified pattern. In \cite{de_marneffe_generating_2006} dependency parse trees are generated from phrase structure parse trees.
-The python package \textit{ptTools} defines a DNS for pattern matching in trees, which is intended to be applied on python parse trees for code analysis and testing. Tregex is a tool for tree querying and Tsurgen for tree manipulation \cite{levy_tregex_2006}. In \cite{Creating graphs from dependency parse trees} graphs are created from dependency parse trees.
+The python package \textit{ptTools} defines a DNS for pattern matching in trees, which is intended to be applied on python parse trees for code analysis and testing. Tregex is a tool for tree querying and Tsurgen for tree manipulation \cite{levy_tregex_2006}. In \cite{ribeyre_linguistically-motivated_2012} graphs are created from dependency parse trees.
 
 \paragraph{XPath}
-The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following description are respective to XPath 1.0.
-Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined in relative to a node denoted as \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axes there is \textit{preceding} and \textit{preceding-sibling} on the left and \textit{following} and \textit{following-sibling} to the right.
+The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following descriptions are respective to XPath 1.0.
+
+\begin{comment}
+Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined relative to a node which is addressed by \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axes there is \textit{preceding} and \textit{preceding-sibling} to the left and \textit{following} and \textit{following-sibling} to the right.
+\end{comment}
+
+Figure \ref{fig:xpath} visualizes the basic relationships that can be expressed
+in XPath in order to construct more complex patterns. Patterns can
+be matched on two axes, relative to a matching node denoted as \textit{self}.
+On the vertical axis, a higher level node can be mached as \textit{ancestor},
+a lower as \textit{decendant}. If the \textit{self} node should be included, \textit{ancestor-or-self} or \textit{descendent-or-self} can be used. A ancestor of first degree is a \textit{parent}
+and a decendent of first degree a \textit{child}. On the horizontal
+axis \textit{preceding} and \textit{following} nodes can be matched.
+If a preceding or following also happens to be a sibling, it can be
+matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
 
 
@@ -62,9 +79,9 @@ Figure \ref{fig:xpath} shows elven of the thirteen different relationships that 
 
 \end{figure}
 
-\subsection{The Imidiate-Follower Relationship}
+\subsection{The Imidiate-Following Relationship}
 
-Another aim of this work is to define patterns in the same way as Hearst-Patterns are defined. The first pattern from the original publication looks like this:
+Another criterion for the language design was, beeing able to define the patterns in the same way as Hearst-Patterns \cite{hearst_automatic_1992} are defined. The first pattern from the original publication looks like this:
 
 \[
 NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n
@@ -72,40 +89,37 @@ NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n
 
 In this representation words and constituency tags are just put in a row seperated by whitespace. While this looks very intuitiv to a human, the technical formulation of the underlying relation, which is crucial for an actual implemntation, requieres some explanation.
 
-Figure 1 visualizes the basic relationships that can be expressed
-in XPath in order to construct more complex patterns. Patterns can
-be matched on two axes, relative to a matching node denoted as \textit{self}.
-On the vertical axis a higher level node can be mached as \textit{ancestor},
-a lower as \textit{decendant}. A ancestor of first degree is a \textit{parent}
-and a decendent of first degree a \textit{child}. On the horizontal
-axis \textit{preceding} and \textit{following} nodes can be matched.
-If a preceding or following also happens to be a sibling, it can be
-matched with \textit{preceding-sibling} and \textit{following-sibling}.
+
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{lara_drinks_tea}
-\caption{Phrase-structure parse tree: yellow nodes have no preceding nodes, blue nodes are imidiate followers of 'Lara'.}
+\caption{Phrase-Structure Parse Tree: Yellow nodes have no preceding nodes, blue nodes are imidiate followers of the yellow markes NP node.}
+\label{fig:lara-drinks-tea}
 \end{figure}
 
-Lets reduce the Hearst-Pattern syntax to just words and constituents tags in a row. How to decide what pattern matches a tree and what not? Figure 2 shows a phrase-structure parse tree of the sentence: "Lara drinks tea.". A Hearst-Pattern like \lstinline{NP drinks NN .} would match, wheres \lstinline{NP VP tea .} would not, because \lstinline{VP} is an ancestor of \lstinline{tea}.
-The nodes that can be in the beginning of a pattern are exacltly the once that have no predecessor (yellow in Figure 2). If we choose 'Lara' as our first node. The next possible in a matching pattern are: \lstinline{VP}, \lstinline{VBZ} or \lstinline{drinks} (marked with blue). In general the constituents that can stand at the next position in a pattern hold a relation called \textit{imidiate-following} to the previous constituent. If a node has preceding siblings, than the first preceding sibling is a imidiate follower. If a node has no preceding siblings than the first preceding sibling of the closest ancestor with preceding siblings is an imidiate follower. The first child of a imidiate follower is a imidiate follower.
 
+Figure \ref{fig:lara-drinks-tea} shows a phrase-structure parse tree of the sentence: "Lara drinks tea.". Lets try to match two simpler patterns in this Hearst-Pattern style on this tree:
+\[NP_0\ drinks\ NP_1\ .\]
+\[NP\ \ VP\ \ tea\ .\]
+How to decide which one matches the sentence and which one does not?  
+
+The nodes that can be in the beginning of a pattern are exactly the once that have no predecessor (yellow nodes in Figure \ref{fig:lara-drinks-tea}). Based on the XPath naming scheme, these nodes are said to be in a \textit{no-preceding} relation to the root node (here \textbf{S}). Both patterns would assign the yellow marked noun phrase node to their first pattern token. Once the NP node is fixed, he next possible nodes to match are: \textbf{VP}, \textbf{VBZ} or \textbf{drinks} (marked with blue). In general the constituents that can stand at the next position in a pattern hold a relation called \textit{imidiate-following} to the previous constituent.
+
+\begin{definition}[imidiate-following]
+ If a node has preceding siblings, then the first preceding sibling is imidiate-following. If a node has no preceding siblings then the first preceding sibling of the closest ancestor that has preceding siblings is imidiate-following. The first child of an imidiate-following node is imidiate-following.
+\end{definition}
+
+In the first pattern, $drinks$ would match to the \textbf{drinks} terminal node. The token $NP_1$ would consequently match to the second \textbf{NP} node and at the end the dot token to the punctuation constituent node. The whole pattern matches. In the second pattern the token $VP$ matches to the node \textbf{VP}. The set imidiate-following nodes for \textbf{VP} only contains the punctuation nodes. Hence the next token $tea$ cannot match, so the whole pattern does not match.
 
 \section{Funktionsweise}
-In the first step the algorithm creates a representation of the sententence structure, called the \textit{property tree}, that incorporates diffenrent sources of information. I is based on the phrase-structure parse tree with additional propertries assigned to the nodes of the tree, which I will just refere to as constituents from here on. For example if the named-entity of a word is 'person', a new variable with the name 'ner' and that value is created and assigned to the corresponding constituent.
+In the first step the algorithm creates a representation of the sententence structure, called the \textit{property tree}, that incorporates diffenrent sources of information. It is based on the phrase-structure parse tree with additional propertries assigned to the nodes of the tree, which I will just refere to as constituents from here on. For example if the named-entity of a word is 'person', a new variable with the name 'ner' and that value is created and assigned to the corresponding constituent.
 In the second step a set of rules defines the way how certain configurations of constituents is translated into semantic domain. A rule consists of four parts, each separated by a collon: 
 
 \[
 \mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformations}
 \] 
 
-The \textit{root-pattern} specifies constrains for a constituent, that forms the root node of a subtree within the property tree. The \textit{pattern} is a list of constituent constriaints. A pattern is mached in the subtree defined by the root-pattern. The relations part defines edges of graph. The transformations assigns one of the constituents matched in the pattern part to the root-constituents (like the head in dependency grammars). A following rule that tries to build a realation with the root-constituent will subsequently point the head-constituent. 
- 
-
-
-
-
-
+The \textit{root-pattern} specifies constrains for a constituent, that forms the root node of a subtree within the property tree. The \textit{pattern} is a list of constituent constriaints. A pattern is mached in the subtree defined by the root-pattern. The relations part defines edges of graph. The transformations assigns one of the constituents matched in the pattern part to the root-constituents (like the head in dependency grammars). A following rule that tries to build a realation with the root-constituent will subsequently point the head-constituent.
 
 
 \section{Language Features}
@@ -389,9 +403,8 @@ Since multiple and optional matching is not yet implemented, here is a version w
 
 This rule applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles.", results in three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
 
-\section{Conclusion}
 
-\textbf{Acknowledgements.} This work was part of the \textit{Knoex} project (abbr. knowledge
+\paragraph{Acknowledgements.} This work was part of the \textit{Knoex} project (abbr. knowledge
 extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In the current version the postfix operator for optional and multiple matching as well as head-splitting is not implemented.
 
 \bibliographystyle{apalike}
