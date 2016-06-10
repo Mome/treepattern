@@ -18,7 +18,7 @@ N3010957100 [label=<<B>DT</B>>]
 T4 [shape=box, label=a]
 N3010957196 [label=<<B>NN</B>>]
 T5 [shape=box, label=binocular]
-N3010956300 [label=<<B>.</B>>]
+N3010956300 [label=<<B>PUNC</B>>]
 T6 [shape=box, label="."]
 N3010954252 -> N3010956012
 N3010956012 -> N3010956140

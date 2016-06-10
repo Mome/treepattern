@@ -18,6 +18,7 @@
 \usepackage{pdflscape}
 \usepackage{verbatim}
 \usepackage{amsthm}
+\usepackage{float}
 
 \newtheorem*{definition}{Definition}
 
@@ -55,12 +56,12 @@ The python package \textit{ptTools} defines a DNS for pattern matching in trees,
 The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following descriptions are respective to XPath 1.0.
 
 \begin{comment}
-Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined relative to a node which is addressed by \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axes there is \textit{preceding} and \textit{preceding-sibling} to the left and \textit{following} and \textit{following-sibling} to the right.
+Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined relative to a node which is addressed by \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axis there is \textit{preceding} and \textit{preceding-sibling} to the left and \textit{following} and \textit{following-sibling} to the right.
 \end{comment}
 
 Figure \ref{fig:xpath} visualizes the basic relationships that can be expressed
 in XPath in order to construct more complex patterns. Patterns can
-be matched on two axes, relative to a matching node denoted as \textit{self}.
+be matched on two axis, relative to a matching node denoted as \textit{self}.
 On the vertical axis, a higher level node can be mached as \textit{ancestor},
 a lower as \textit{decendant}. If the \textit{self} node should be included, \textit{ancestor-or-self} or \textit{descendent-or-self} can be used. A ancestor of first degree is a \textit{parent}
 and a decendent of first degree a \textit{child}. On the horizontal
@@ -68,27 +69,23 @@ axis \textit{preceding} and \textit{following} nodes can be matched.
 If a preceding or following also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
-
-
 \begin{figure}
-
 \centering
-\includegraphics[scale=0.6]{pathx_axes}
+\includegraphics[scale=0.35]{xpath-axis}
 \caption{Subset of relationships expressable in XPath}
 \label{fig:xpath}
-
 \end{figure}
+
 
 \subsection{The Imidiate-Following Relationship}
 
 Another criterion for the language design was, beeing able to define the patterns in the same way as Hearst-Patterns \cite{hearst_automatic_1992} are defined. The first pattern from the original publication looks like this:
 
-\[
-NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n
-\]
+\[ NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n \]
 
 In this representation words and constituency tags are just put in a row seperated by whitespace. While this looks very intuitiv to a human, the technical formulation of the underlying relation, which is crucial for an actual implemntation, requieres some explanation.
 
+\label{ssec:imidiate-following}
 
 \begin{figure}
 \centering
@@ -111,52 +108,93 @@ The nodes that can be in the beginning of a pattern are exactly the once that ha
 
 In the first pattern, $drinks$ would match to the \textbf{drinks} terminal node. The token $NP_1$ would consequently match to the second \textbf{NP} node and at the end the dot token to the punctuation constituent node. The whole pattern matches. In the second pattern the token $VP$ matches to the node \textbf{VP}. The set imidiate-following nodes for \textbf{VP} only contains the punctuation nodes. Hence the next token $tea$ cannot match, so the whole pattern does not match.
 
-\section{Funktionsweise}
-In the first step the algorithm creates a representation of the sententence structure, called the \textit{property tree}, that incorporates diffenrent sources of information. It is based on the phrase-structure parse tree with additional propertries assigned to the nodes of the tree, which I will just refere to as constituents from here on. For example if the named-entity of a word is 'person', a new variable with the name 'ner' and that value is created and assigned to the corresponding constituent.
-In the second step a set of rules defines the way how certain configurations of constituents is translated into semantic domain. A rule consists of four parts, each separated by a collon: 
 
-\[
-\mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformations}
-\] 
+\section{The Domain Specific Languge}
 
-The \textit{root-pattern} specifies constrains for a constituent, that forms the root node of a subtree within the property tree. The \textit{pattern} is a list of constituent constriaints. A pattern is mached in the subtree defined by the root-pattern. The relations part defines edges of graph. The transformations assigns one of the constituents matched in the pattern part to the root-constituents (like the head in dependency grammars). A following rule that tries to build a realation with the root-constituent will subsequently point the head-constituent.
+Before the pattern matching can begin a representation of the sententence structure, called the \textit{property tree}, which incorporates different sources of informations is created. It is based on the phrase-structure parse tree with additional propertries assigned to some node. The nodes of ther property tree are also just refered to as constituents. For example, if the named-entity of a word is 'person', a new variable with name 'ner' and value 'person' can be created and added to the corresponding constituent.
 
+After that a set of rules is loaded the way how patterns of constituents are translated into semantic domain. A rule consists of four parts, each separated by a collon: 
 
-\section{Language Features}
-A program in the Domain-Specific Language consists of a list of rules. Each rule consists of four parts (root-pattern, pattern, relations and transformations), each separated by a collon: 
+\[ \mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformation} \] 
 
-\[
-\mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformations}
-\]
+The \textit{root-pattern} is a single and the \textit{pattern} is a series of \textit{pattern-tokens}. A pattern-token defines a set of constraints in order to match a single node or in special cases multiple nodes (see Section \ref{para:multi}) of the property tree.
+A node that is matched by the root-pattern will form the root node of a subtree (of the property tree). The pattern is written in a Hearst-Pattern style (just like in Section \ref{ssec:imidiate-following}) and can match constituents inside the subtree streched by the root-pattern. Constituents matched by two adjacent pattern-tokens must stand in a imidiate-following relationship. In the simplest case the pattern token can  be the label of a constituent (for example $\mathtt{NP}$) or a terminal (for example $\mathtt{drinks}$). The algorithm automatically adds 'label=NP' for constituents and 'terminal=drinks' for terminals to the constraints set. If the same name occures more than ones, numbers can be added to the token (for example $\mathtt{NP1}$). The numbers will just effect the variable name of the pattern-token, not the constraint set.  
+The \textit{relations} part defines new edges of a graph. The variable names of the pattern-tokens are hereby reused. $\mathtt{NP-drinks}$ will create a directed edge between a node associated to constituent matched by $\mathtt{NP}$ and a node associated to constrituent matched by $\mathtt{drinks}$.
+The \textit{transformation} part assigns a head-constrituents to the constituent matched by the root-pattern. It consists usually of one pattern-token variable name (in special cases more, see head-splitting). If another rule tries to create an edge pointing the the constituent matched by the root-pattern, it will instead point to the head-constituent.
+Once all rules are parsed the constituent tags of the graph are replaced by the corresponing terminal strings.
+\begin{figure}
+\centering
+\includegraphics[width=.6\linewidth]{step_example_parsetree}
+\lstset{
+  %caption=Descriptive Caption Text,
+  numbers=left,
+  frame=tb,
+  xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
+} 
+\begin{lstlisting}
+ S  : NP VP .  : NP-VP      : S
+ VP : V  NP PP : V-NP  PP-V : V
+ PP : IN DT N  : DT-N  N-IN : IN 
+ DT : a :: indefinite
+\end{lstlisting}
+\caption{Parsetree and rules for table \ref{tab:step-by-step}}
+\label{fig:step-by-step}
+\end{figure}
+Table \ref{tab:step-by-step} gives a step-by-step example of the whole matching and graph-building process applied. The parse tree and rules hereby used are can be seen in Figure \ref{fig:step-by-step}. Coloumn one shows which constituents (bold font) mached to which pattern-token (typewriter font). Coloumn two show the varaibel graph at that point. Column two show the actual resulting graph, if the terminal assignment would already be performed at that point.
 
-It can be red in the following way: First find a node that matches the root-pattern
+\begin{landscape}
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline  
+    Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline 
 
-Root-pattern and pattern are instructions to the pattern-matcher, the last two are define 
-The head part defines the highest node, of a subtree in wich the pattern
-can be matched. The pattern part is a list of terminals or constituents,
-which implicitely defines a series of next-potential-follower relations.
-The tansformation defines a function call.
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{S}$ & $\mathtt{NP}$ & $\mathtt{V}$ & . \\ \hline
+      \textbf{S} & \textbf{NP}\textsubscript{1} & \textbf{V} & \textbf{.} 
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_1}} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_1}} \\ \hline
 
-The pattern part consists of a series of graph relations. The graph
-relations are for once the graph relations also available in XPath
-(child, parent, sibling, follower, ancestor) and for the other a series
-of imidiate-follower relations, written in the Hearst-Pattern style.
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{VP}$ & $\mathtt{V}$ & $\mathtt{NP}$ & $\mathtt{PP}$ \\ \hline
+      \textbf{VP} & \textbf{VBP} & \textbf{NP}\textsubscript{2} & \textbf{PP}
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_2}} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_2}}\\ \hline
 
-The predicate part defines the semantic relations between the matched
-strings. 
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{PP}$ & $\mathtt{IN}$ & $\mathtt{DT}$ & $\mathtt{N}$  \\ \hline
+      \textbf{PP} & \textbf{IN} & \textbf{DT}  & \textbf{NN} 
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_3}}&
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_3}}\\ \hline
+
+    \begin{tabular}{c||c}
+      $\mathtt{DT}$ & $\mathtt{a}$ \\ \hline
+      \textbf{DT} & a
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
+  \end{tabular}
+  \caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
+  \label{tab:step-by-step}
+
+\end{table}
+\end{landscape}
 
 \paragraph{Macros}{
-	Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
+  Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
 
-	\begin{lstlisting}
+  \begin{lstlisting}
   V  = {VB, VBD, VBG, VBN, VBP, VBZ}
   N  = {NN, NNS, NNP, NNPS, PRP}
   W  = {WHADJP, WHAVP, WHNP, WHPP}
   SS = {S, SBAR, SBARQ, SINV, SQ}
   J  = {JJ, JJR, JJS}
-	\end{lstlisting}
+  \end{lstlisting}
 
-	With \lstinline{V} standing for verbs, \lstinline{N} for nouns, \lstinline{W} for questions, \lstinline{SS} for sentences and \lstinline{J} for adjectives. They can be used just as other variables. 
+  With \lstinline{V} standing for verbs, \lstinline{N} for nouns, \lstinline{W} for questions, \lstinline{SS} for sentences and \lstinline{J} for adjectives. They can be used just as other variables. 
 }
 
 \paragraph{Property matching}
@@ -164,14 +202,15 @@ Matching of other properties than 'terminal' or 'label' is expressed in squared 
 The right hand side of a property constraint can also be a set values. In this case a constitiuent must have one of these properties to match. Example: \lstinline|DT[terminal={an,a}]| - matches a determiner with terminal 'a' or 'an'.
 
 \paragraph{Multiple and Optional parsing}
+\label{para:multi}
 Variables defined in pattern can occure multiple times to match multiple constituents. The relations defind for that variable are consequently applied to all matches. Example: The rule \lstinline{S : N V and V . : N-V : S} 
 contains two time the variable \lstinline{V}. The rule applied to "Hanna walks and talks." will match 'walks' as well as 'talks' for \lstinline{V}. So the relation \lstinline{N-V} is formed two times, resulting in: (Hanna)$\rightarrow$ [walks], and (Hanna)$\rightarrow$ [talks].
 Three postfix operators, inspiered by regular expressions, can be added to the end of a pattern token, to make the match optional or repetitive. Multiple nodes assigned to a variable are handled in same way as before.
 
 \begin{tabular}{cll}
-	$\mathbf{?}$ & optional & match once or do not match\\
-	$+$ & mutliple & match at least once\\
-	$*$ & multinal & match arbitrary times (inlcuding: do not match)
+  $\mathbf{?}$ & optional & match once or do not match\\
+  $+$ & mutliple & match at least once\\
+  $*$ & multinal & match arbitrary times (inlcuding: do not match)
 \end{tabular}
 
 Example: \lstinline{NP : DT? J* N : J-N : N} matches a noun with or with or without a preceding determiner and arbitrary adjectives.
@@ -180,55 +219,8 @@ Example: \lstinline{NP : DT? J* N : J-N : N} matches a noun with or with or with
 \paragraph{Cluster references}
 If a sentence contains a dependent clause, one part of the sentence referece to another part of the sentence. For this purpose it is possible to specifiy a subgraph instead of a node as the head. If the root of a rule is equal to its transistions, the entities refering to the ancestors of a matching constituent will be put into a cluster. If another entity wants to point to the entity representing the root match, it will point to the cluster instead.
 
-
-\begin{figure}
-\centering
-\includegraphics[width=.5\linewidth]{cluster_reference_parsetree}
-
-\lstset{
-	%caption=Descriptive Caption Text,
-	numbers=left,
-	frame=tb,
-	xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
-} 
-
-\begin{lstlisting}
-SS : NP VP .? : NP-VP : SS
-SS : IN SS1   :       : SS1
-VP : V  SS    : V-SS  : V
-\end{lstlisting}
-
-\includegraphics[width=.7\linewidth]{cluster_reference_graph}
-
-\caption{Cluster references Root and tail of line 1 are both SS: ... Line 2: "that" is ommited. Line 3: make an edge beteween the verb of the first part ("said") and the dependent clause "Lara smokes". }
-\end{figure}
-
-
-
 \paragraph{Head Splitting}
 For some sentences it is desireable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
-
-\begin{figure}
-\centering
-
-%\textbf{Head Splitting }\par\medskip
-
-\includegraphics[width=.5\linewidth]{headsplit_parsetree}
-
-
-
-\begin{lstlisting}[frame=tb, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth]
- SS : NP VP . : NP-VP : SS
- VP : VP1 CC VP2 :: VP1 VP2 
-\end{lstlisting}
-
-\includegraphics[width=.3\linewidth]{headsplit_graph}
-
-\caption{\label{Head Splitting} The rules in the middle applied to the parsetree on the top yield the graph in the bottom.}
-
-\end{figure}
-
-
 
 \paragraph{Predicate Mode}
 In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
@@ -237,16 +229,47 @@ In predicate mode the relations part of a rule will define predicates instead of
 S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 \end{lstlisting}
 
+\begin{landscape}
+\centering
+\begin{minipage}{0.45\linewidth}%
+  \centering
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{cluster_reference_parsetree}
+  \begin{lstlisting}[frame=tb, numbers=left, keepspaces=true, xleftmargin=.1\textwidth, xrightmargin=.1\textwidth]]
+SS : NP VP .? : NP-VP : SS
+SS : IN SS1   :       : SS1
+VP : V SS     : V-SS  : V\end{lstlisting}
+  \includegraphics[width=1\linewidth]{cluster_reference_graph}
+  \caption{\textbf{Cluster References.} Root and tail of line 1 are both SS: ... Line 2: "that" is ommited. Line 3: make an edge beteween the verb of the first part ("said") and the dependent clause "Lara smokes". }
+  \label{fig:cluster-ref}
+  \end{figure}
+\end{minipage}%
+\hspace{0.05\linewidth}
+\begin{minipage}{0.45\linewidth}%
+  \centering
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{headsplit_parsetree}
+  \begin{lstlisting}[frame=tb, keepspaces=true, xleftmargin=.01\textwidth, xrightmargin=.01\textwidth] 
+SS : NP  VP .   : NP-VP : SS
+VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
+  \includegraphics[width=.4\linewidth]{headsplit_graph}
+  \caption{\textbf{Head Splitting.} The rules in the middle applied to the parsetree on the top yield the graph in the bottom.}
+  \label{fig:head-splitting}
+  \end{figure}
+\end{minipage}%
+\end{landscape}
 
 \section{Algorithm}
 
 1 parse sentence
 2 create property tree from parsetree
 3 for each rule
-	3.1 find subtrees where root node matches head constraints
-	3.2 for each subtree
-		3.2.1 find nodes without preceding nodes
-		3.2.2 for each node match pattern
+  3.1 find subtrees where root node matches head constraints
+  3.2 for each subtree
+    3.2.1 find nodes without preceding nodes
+    3.2.2 for each node match pattern
 
 \begin{algorithm}
 \SetAlgoLined
@@ -262,18 +285,18 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 \Fn{\MatchPattern(\root, \head, \pattern)}
 {
 
-	\ForEach{node \in \root.descendant\_or\_self}{
-		\If{node satisfies head constraints}
-		{
-			start\_nodes $\leftarrow$ node.no\_preceding
+  \ForEach{node \in \root.descendant\_or\_self}{
+    \If{node satisfies head constraints}
+    {
+      start\_nodes $\leftarrow$ node.no\_preceding
 
-			assignment $\leftarrow$ empty list of length(pattern)
+      assignment $\leftarrow$ empty list of length(pattern)
 
-			matches $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment, index=0)	
+      matches $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment, index=0)  
 
-			return matches
-		}
-	}
+      return matches
+    }
+  }
 
 }
 \end{algorithm}
@@ -292,18 +315,18 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 {
 
 
-	\ForEach{node \in \root.descendant\_or\_self}{
-		\If{node satisfies head constraints}
-		{
-			start\_nodes $\leftarrow$ node.no\_preceding
+  \ForEach{node \in \root.descendant\_or\_self}{
+    \If{node satisfies head constraints}
+    {
+      start\_nodes $\leftarrow$ node.no\_preceding
 
-			assignment $\leftarrow$ empty list of length(pattern)
+      assignment $\leftarrow$ empty list of length(pattern)
 
-			matches = $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment)	
-			
-			return matches
-		}
-	}
+      matches = $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment) 
+      
+      return matches
+    }
+  }
 
 }
 \end{algorithm}
@@ -312,73 +335,10 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 
 \section{Examples}
 
-\subsection{Step-by-Step Example}
-Figure \ref{fig:step-by-step} shows another parsetree together with a set of rules. The process of pattern matching and graph building for each rule is displayed in table \ref{tab:step-by-step}.
 
 
 
-\begin{figure}
-\centering
-\includegraphics[width=.6\linewidth]{step_example_parsetree}
 
-\lstset{
-	%caption=Descriptive Caption Text,
-	numbers=left,
-	frame=tb,
-	xleftmargin=.15\textwidth, xrightmargin=.15\textwidth
-} 
-
-\begin{lstlisting}
- S  : NP VP .  : NP-VP      : S
- VP : V  NP PP : V-NP  PP-V : V
- PP : IN DT N  : DT-N  N-IN : IN 
- DT : a :: indefinite
-\end{lstlisting}
-
-\caption{Parsetree and rules for table \ref{tab:step-by-step}}
-\label{fig:step-by-step}
-\end{figure}
-
-\begin{landscape}
-\begin{table}
-	\centering
-	\begin{tabular}{|c|c|c|}
-	  \hline  
-		Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline	
-
-		\begin{tabular}{c||c|c|c}
-			$\mathtt{S}$ & $\mathtt{NP}$ & $\mathtt{V}$ & . \\ \hline
-			\textbf{S} & \textbf{NP}\textsubscript{1} & \textbf{V} & \textbf{.} 
-		\end{tabular} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_1}} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_1}} \\ \hline
-
-		\begin{tabular}{c||c|c|c}
-			$\mathtt{VP}$ & $\mathtt{V}$ & $\mathtt{NP}$ & $\mathtt{PP}$ \\ \hline
-			\textbf{VP} & \textbf{VBP} & \textbf{NP}\textsubscript{2} & \textbf{PP}
-		\end{tabular} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_2}} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_2}}\\ \hline
-
-		\begin{tabular}{c||c|c|c}
-			$\mathtt{PP}$ & $\mathtt{IN}$ & $\mathtt{DT}$ & $\mathtt{N}$  \\ \hline
-			\textbf{PP} & \textbf{IN} & \textbf{DT}  & \textbf{NN} 
-		\end{tabular} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_3}}&
-		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_3}}\\ \hline
-
-		\begin{tabular}{c||c}
-			$\mathtt{DT}$ & $\mathtt{a}$ \\ \hline
-			\textbf{DT} & a
-		\end{tabular} &
-		\adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
-		\adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
-	\end{tabular}
-	\caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
-	\label{tab:step-by-step}
-
-\end{table}
-\end{landscape}
 
 
 \subsection{Example: Hearst-Pattern}

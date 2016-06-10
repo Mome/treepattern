@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 from subprocess import call
 from os import listdir
 from os.path import splitext, isdir
@@ -19,5 +21,5 @@ for i, fname in enumerate(listdir()):
         fname,
     ])
 
-print('convert gif file: pathx_axes.gif')
-call(['convert', 'pathx_axes.gif', 'pathx_axes.png'])        
+print('convert gif file: pathx-axis.gif')
+call(['convert', 'xpath-axis.gif', 'xpath-axis.png'])        
