@@ -3,7 +3,7 @@
 \documentclass[english]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{babel}
-\usepackage[]{algorithm2e}
+\usepackage[linesnumbered]{algorithm2e}
 \usepackage{newlfont}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -27,7 +27,7 @@
 
 \begin{document}
 
-\title{A domain specific language for graph genenration from parse trees by pattern matching.}
+\title{A Domain-Specific Language for Graph Genenration from Parse Trees by Pattern Matching}
 
 
 \author{Moritz Meier}
@@ -36,10 +36,7 @@
 
 \section{Introduction}
 
-Due to the imense complexity and ambiguity of human language, information extraction (IE) from written natural language remains an unsolved problem. 
-
-The DSL (Domain-Specific Language) and the underlying algorithm, described in the work, was designed to transform a phrase structure parse-tree into a graph of semantic relations. However it can in principle be used on any tree structure to produce other kinds of graph structures. The method also includes that additional propertries can be assigend to nodes of trees such that inforamtion of other sources, common in computational linguistics, can incorporated into on representation. The DSL makes it convinient to define pairs of patterns, that act locally on the tree, and corrisponding transistions to form and transform nodes and edges of a graph.
-In case the reader is unfamiliar with the abbreviation used for constituents, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}.
+Information extraction (IE) from written natural language remains, due to the imense complexity and ambiguity of human language, an unsolved problem. Tree and graph transformation has recently gained some attention as a natural language methods\cite{ribeyre_linguistically-motivated_2012}. This text descripes a domain-specific language (DSL) and its undelying algorithm, which were designed to transform a phrase structure parse-tree into a graph of semantic relations. The software can in principle be used on any tree structure to produce other kinds of graph structures. The method also includes that additional propertries can be assigend to the tree structure, such that inforamtion of other IE sources, can be incorporated into one single representation. The DSL makes it convinient to define pairs of local tree patterns and its corrisponding transistions to create and transform nodes and edges of a graph. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In case the reader is unfamiliar with abbreviations for constituents, used in this text, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}.
 
 \subsection{Motivation}
 
@@ -142,46 +139,6 @@ Once all rules are parsed the constituent tags of the graph are replaced by the 
 \end{figure}
 Table \ref{tab:step-by-step} gives a step-by-step example of the whole matching and graph-building process applied. The parse tree and rules hereby used are can be seen in Figure \ref{fig:step-by-step}. Coloumn one shows which constituents (bold font) mached to which pattern-token (typewriter font). Coloumn two show the varaibel graph at that point. Column two show the actual resulting graph, if the terminal assignment would already be performed at that point.
 
-\begin{landscape}
-\begin{table}
-  \centering
-  \begin{tabular}{|c|c|c|}
-    \hline  
-    Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline 
-
-    \begin{tabular}{c||c|c|c}
-      $\mathtt{S}$ & $\mathtt{NP}$ & $\mathtt{V}$ & . \\ \hline
-      \textbf{S} & \textbf{NP}\textsubscript{1} & \textbf{V} & \textbf{.} 
-    \end{tabular} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_1}} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_1}} \\ \hline
-
-    \begin{tabular}{c||c|c|c}
-      $\mathtt{VP}$ & $\mathtt{V}$ & $\mathtt{NP}$ & $\mathtt{PP}$ \\ \hline
-      \textbf{VP} & \textbf{VBP} & \textbf{NP}\textsubscript{2} & \textbf{PP}
-    \end{tabular} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_2}} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_2}}\\ \hline
-
-    \begin{tabular}{c||c|c|c}
-      $\mathtt{PP}$ & $\mathtt{IN}$ & $\mathtt{DT}$ & $\mathtt{N}$  \\ \hline
-      \textbf{PP} & \textbf{IN} & \textbf{DT}  & \textbf{NN} 
-    \end{tabular} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_3}}&
-    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_3}}\\ \hline
-
-    \begin{tabular}{c||c}
-      $\mathtt{DT}$ & $\mathtt{a}$ \\ \hline
-      \textbf{DT} & a
-    \end{tabular} &
-    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
-    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
-  \end{tabular}
-  \caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
-  \label{tab:step-by-step}
-
-\end{table}
-\end{landscape}
 
 \paragraph{Macros}{
   Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
@@ -230,6 +187,45 @@ S : NP1 is mother of NP2 : mother_of(NP1,NP2) : S
 \end{lstlisting}
 
 \begin{landscape}
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline  
+    Pattern Match & Graph with Constituent Labels & Graph with Terminal Labels \\ \hline \hline 
+
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{S}$ & $\mathtt{NP}$ & $\mathtt{V}$ & . \\ \hline
+      \textbf{S} & \textbf{NP}\textsubscript{1} & \textbf{V} & \textbf{.} 
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_1}} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_1}} \\ \hline
+
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{VP}$ & $\mathtt{V}$ & $\mathtt{NP}$ & $\mathtt{PP}$ \\ \hline
+      \textbf{VP} & \textbf{VBP} & \textbf{NP}\textsubscript{2} & \textbf{PP}
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_2}} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_2}}\\ \hline
+
+    \begin{tabular}{c||c|c|c}
+      $\mathtt{PP}$ & $\mathtt{IN}$ & $\mathtt{DT}$ & $\mathtt{N}$  \\ \hline
+      \textbf{PP} & \textbf{IN} & \textbf{DT}  & \textbf{NN} 
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_3}}&
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_3}}\\ \hline
+
+    \begin{tabular}{c||c}
+      $\mathtt{DT}$ & $\mathtt{a}$ \\ \hline
+      \textbf{DT} & a
+    \end{tabular} &
+    \adjustbox{valign=c}{\includegraphics[scale=0.5]{step_example_raw_4}}&
+    \adjustbox{valign=c}{\includegraphics[scale=0.4]{step_example_4}}\\ \hline
+  \end{tabular}
+  \caption{Step-by-step application of the rules from figure \ref{fig:step-by-step}}
+  \label{tab:step-by-step}
+\end{table}
+\end{landscape}
+\begin{landscape}
 \centering
 \begin{minipage}{0.45\linewidth}%
   \centering
@@ -258,19 +254,14 @@ VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
   \caption{\textbf{Head Splitting.} The rules in the middle applied to the parsetree on the top yield the graph in the bottom.}
   \label{fig:head-splitting}
   \end{figure}
-\end{minipage}%
+\end{minipage}
 \end{landscape}
 
 \section{Algorithm}
 
-1 parse sentence
-2 create property tree from parsetree
-3 for each rule
-  3.1 find subtrees where root node matches head constraints
-  3.2 for each subtree
-    3.2.1 find nodes without preceding nodes
-    3.2.2 for each node match pattern
+In the implementation the matching algorithm consists of an outer function \textit{MatchPattern} which the recursive inner function \textit{FindAssignment}.
 
+In line 2 and 3 of MatchPattern only nodes that match the root-pattern are selected. In line 4 selects the nodes that can match the first token of a pattern. Finally in line 5 FindAssignments will fill the list with nodes of the property tree.
 \begin{algorithm}
 \SetAlgoLined
 \SetKwProg{Fn}{Function}{:}{end}
@@ -280,8 +271,6 @@ VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
 \SetKwData{head}{head}
 \SetKwData{pattern}{pattern}
 \SetKw{in}{in}
-
-
 \Fn{\MatchPattern(\root, \head, \pattern)}
 {
 
@@ -290,9 +279,7 @@ VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
     {
       start\_nodes $\leftarrow$ node.no\_preceding
 
-      assignment $\leftarrow$ empty list of length(pattern)
-
-      matches $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment, index=0)  
+      matches $\leftarrow$ \FindMatches(start\_nodes, \pattern)  
 
       return matches
     }
@@ -301,47 +288,61 @@ VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
 }
 \end{algorithm}
 
+In line 2 and 3 of FindAssignment assignment becomes an empty list, where the varaibel assignments created from the pattern tokens, can be stored. Line 5 is the recursion stop. If all variables have an assignment and if there are nodes imidiate-followers to the last matching node, the current assignment is a match. Line 8 pics the data from the current pattern-token. Line 9 and 10 selects all nodes that match the pattern-token (aka have all properties requiered by the constraints). Line 11 and 12: If a node matches, that node is assigned to the variable and FindAssignment is called for next pattern-token again.
 
 \begin{algorithm}
 \SetAlgoLined
 \SetKwProg{Fn}{Function}{:}{end}
 \SetKwFunction{MatchPattern}{MatchPattern}
-\SetKwFunction{FindMatches}{FindMatches}
+\SetKwFunction{FindAssignment}{FindAssignment}
 \SetKwData{root}{root}
 \SetKwData{head}{head}
 \SetKwData{pattern}{pattern}
 \SetKw{in}{in}
-\Fn{\FindMatches(next\_nodes, pattern, head\_node, variables, index)}
+\Fn{\FindAssignment(next\_nodes, pattern, assignment=None, index=0)}
 {
-
-
-  \ForEach{node \in \root.descendant\_or\_self}{
-    \If{node satisfies head constraints}
-    {
-      start\_nodes $\leftarrow$ node.no\_preceding
-
-      assignment $\leftarrow$ empty list of length(pattern)
-
-      matches = $\leftarrow$ \FindMatches(start\_nodes, \pattern, node, assignment) 
-      
-      return matches
-    }
+  \If{assignment == None}{
+    assignment $\leftarrow$ empty list of length(pattern)
   }
+  \eIf{(len(pattern) == index) and (len(nodes) == 0)}
+  {
+    yield copy(assignment)
+  }{
+    varname, constraints $\leftarrow$ pattern[index]
 
+    \ForEach{node \in next\_nodes}{
+      \If{node satisfies constraints}{
+        assignment[index] $\leftarrow$ (varname, node)
+
+        matches = FindAssignment(node.imidiate\_following, pattern, assignment, index+1)
+
+        yield from matches
+      }
+    }
+  } 
 }
 \end{algorithm}
 
+\begin{comment}
+    else:
+        varname, constraints = pattern[index]
 
+        for node in nodes:
 
-\section{Examples}
+            satisfies_constaints = node.has_properties(**constraints)
 
+            if not satisfies_constaints:
+                continue
 
+            match[index] = (varname, node) # assign node to variable
 
+            imidiate_following = node.imidiate_following(root=head_node)
 
+            yield from self._search(imidiate_following, pattern, head_node, match, index+1)
 
+\end{comment}
 
-
-\subsection{Example: Hearst-Pattern}
+\section{Example: Hearst-Pattern}
 
 The exact form of the first Hearst-Pattern in its original publication is:
 

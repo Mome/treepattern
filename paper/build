@@ -1,8 +1,4 @@
 #! /usr/bin/sh
 
-pdflatex knoex_paper
-bibtex knoex
-pdflatex knoex_paper
-pdflatex knoex_paper
-
-
+rm *.out *.aux *.log *.pdf *.blg *.bbl *.dvi
+pdflatex knoex_paper && bibtex knoex_paper && pdflatex knoex_paper && pdflatex knoex_paper
