@@ -1,5 +1,3 @@
-%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[english]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{babel}
@@ -27,7 +25,7 @@
 
 \begin{document}
 
-\title{A Domain-Specific Language for Graph Genenration from Parse Trees by Pattern Matching}
+\title{A Domain-Specific Language for Graph Generation from Parse Trees by Pattern Matching}
 
 
 \author{Moritz Meier}
@@ -36,58 +34,62 @@
 
 \section{Introduction}
 
-Information extraction (IE) from written natural language remains, due to the imense complexity and ambiguity of human language, an unsolved problem. Tree and graph transformation has recently gained some attention as a natural language methods\cite{ribeyre_linguistically-motivated_2012}. This text descripes a domain-specific language (DSL) and its undelying algorithm, which were designed to transform a phrase structure parse-tree into a graph of semantic relations. The software can in principle be used on any tree structure to produce other kinds of graph structures. The method also includes that additional propertries can be assigend to the tree structure, such that inforamtion of other IE sources, can be incorporated into one single representation. The DSL makes it convinient to define pairs of local tree patterns and its corrisponding transistions to create and transform nodes and edges of a graph. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In case the reader is unfamiliar with abbreviations for constituents, used in this text, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}.
+Information extraction (IE) from written natural language remains, due to the immense complexity and ambiguity of human language, an unsolved problem. Tree and graph transformation has recently gained some attention as a natural language methods\cite{ribeyre_linguistically-motivated_2012}. This text descries a domain-specific language (DSL) and its underlying algorithm, which were designed to transform a phrase structure parse-tree into a graph of semantic relations. The software can in principle be used on any tree structure to produce other kinds of graph structures. The method also includes that additional properties can be assigned to the tree structure, such that information of other IE sources, can be incorporated into one single representation. The DSL makes it convenient to define pairs of local tree patterns and its corresponding transitions to create and transform nodes and edges of a graph. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In case the reader is unfamiliar with abbreviations for constituents, used in this text, here is a list of all tags used in the Stanford Parser: \url{http://github.com/mome/treepattern/wiki/List-of-Constituent-Tags}.
+
 
 \subsection{Motivation}
 
-If we consider natural language as a \textit{serialation of mental content}, which is decoded and encoded by humans in order to communicate. If we also define a formal language that can partially express mental content, than there must be a method which can partially map natural language to the formal language. Furtheron we can see that natural lanuage has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constiutens} but in different theories different parts of a sententence qualify as a constituent.
-Phrase-structure grammars are a common way assign a hierachical structure of constituents to a sentence. They are context-free grammars that yield a parse tree with words as terminal symboles and nodes refering to constituentns of the sentence. Despite beeing a syntactic method, phrase-structure parse trees also carry semantic information. Constituents can refer to entities or concepts, others express relations between concepts.
-Computational linguistics possesses various other isolated methods to provide information about the parts of a sentence. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigs nouns to (semantic) categories.
+If we consider natural language as a \textit{serialization of mental content}, which is decoded and encoded by humans in order to communicate. If we also define a formal language that can partially express mental content, then there must be a method which can partially map natural language to the formal language. Further on we can see that natural language has a (mostly) modular architecture. Words can be composed syntactically to form a unit with a composed meaning. Linguistics calls this composable units \textit{constituents}, but in different theories different parts of a sentence qualify as a constituent.
+
+Phrase-structure grammars are a common way assign a hierarchical structure of constituents to a sentence. They are context-free grammars that yield a parse tree with words as terminal symbols and nodes referring to constituents of the sentence. Despite being a syntactic method, phrase-structure parse trees also carry semantic information. Constituents can refer to entities or concepts, others express relations between concepts. How is it possible to extract this semantic information?
+
+Computational linguistics possesses various other isolated methods to provide information about the parts of a sentence. POS-tagging finds the syntactic role of words, lemmatization removes inflection, NER-tagging assigns nouns to (semantic) categories. How it is possible to bring these different sources together and put them in one unified representation?
+
 
 \subsection{Related Work}
 
 Pattern Matching in trees is used in various different contexts. \cite{hoffmann_pattern_1982} is a detailed discussion on pattern matching in programming language parse trees and subtree replacement for such things as code optimization and theorem proving. \cite{rim_transforming_1990} describes a computational method to transform syntactic graphs into semantic ones. The primary function of TGrep \cite{rohde_tgrep2_2004} is to extract parse trees whose structures match a specified pattern. In \cite{de_marneffe_generating_2006} dependency parse trees are generated from phrase structure parse trees.
-The python package \textit{ptTools} defines a DNS for pattern matching in trees, which is intended to be applied on python parse trees for code analysis and testing. Tregex is a tool for tree querying and Tsurgen for tree manipulation \cite{levy_tregex_2006}. In \cite{ribeyre_linguistically-motivated_2012} graphs are created from dependency parse trees.
+The python package \textit{ptTools} also defines a DSL for pattern matching in trees, which is intended to be applied on python parse trees for code analysis and testing. Tregex is a tool for tree querying and Tsurgen for tree manipulation \cite{levy_tregex_2006}. In \cite{ribeyre_linguistically-motivated_2012} graphs are created from dependency parse trees.
 
 \paragraph{XPath}
 The XML Path Language (or short XPath) is a query language for node selection in XML documents. The version XPath 3.0 is currently a WC3 Recommendation and in wide use. The following descriptions are respective to XPath 1.0.
 
 \begin{comment}
-Figure \ref{fig:xpath} shows elven of the thirteen different relationships that can be expressed in XPath. All relationships are defined relative to a node which is addressed by \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendent} and \textit{descendent-or-self} in the downward direction. On the horizontal axis there is \textit{preceding} and \textit{preceding-sibling} to the left and \textit{following} and \textit{following-sibling} to the right.
+Figure \ref{fig:xpath} shows eleven of the thirteen different relationships that can be expressed in XPath. All relationships are defined relative to a node which is addressed by \textit{self}. On the vertical axis there is \textit{parent}, \textit{ancestor} and \textit{ancestor-or-self} in the upward direction and \textit{child}, \textit{descendant} and \textit{descendant-or-self} in the downward direction. On the horizontal axis there is \textit{preceding} and \textit{preceding-sibling} to the left and \textit{following} and \textit{following-sibling} to the right.
 \end{comment}
 
 Figure \ref{fig:xpath} visualizes the basic relationships that can be expressed
 in XPath in order to construct more complex patterns. Patterns can
 be matched on two axis, relative to a matching node denoted as \textit{self}.
-On the vertical axis, a higher level node can be mached as \textit{ancestor},
-a lower as \textit{decendant}. If the \textit{self} node should be included, \textit{ancestor-or-self} or \textit{descendent-or-self} can be used. A ancestor of first degree is a \textit{parent}
-and a decendent of first degree a \textit{child}. On the horizontal
+On the vertical axis, a higher level node can be matched as \textit{ancestor},
+a lower as \textit{descendant}. If the \textit{self} node should be included, \textit{ancestor-or-self} or \textit{descendant-or-self} can be used. A ancestor of first degree is a \textit{parent}
+and a decedent of first degree a \textit{child}. On the horizontal
 axis \textit{preceding} and \textit{following} nodes can be matched.
-If a preceding or following also happens to be a sibling, it can be
+If a preceding or following node also happens to be a sibling, it can be
 matched with \textit{preceding-sibling} and \textit{following-sibling}.
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.35]{xpath-axis}
-\caption{Subset of relationships expressable in XPath}
+\caption{Subset of relationships expressible in XPath}
 \label{fig:xpath}
 \end{figure}
 
 
-\subsection{The Imidiate-Following Relationship}
+\subsection{The Immediate-Following Relationship}
 
-Another criterion for the language design was, beeing able to define the patterns in the same way as Hearst-Patterns \cite{hearst_automatic_1992} are defined. The first pattern from the original publication looks like this:
+Another criterion for the language design was, being able to define the patterns in the same way as Hearst-Patterns \cite{hearst_automatic_1992} are defined. The first pattern from the original publication looks like this:
 
 \[ NP_0\ such\ as\ \{NP_1,\ NP_2\ ...\ ,(and|or)\}\ NP_n \]
 
-In this representation words and constituency tags are just put in a row seperated by whitespace. While this looks very intuitiv to a human, the technical formulation of the underlying relation, which is crucial for an actual implemntation, requieres some explanation.
+In this representation words and constituency tags are just put in a row separated by whitespace. While this looks very intuitive to a human, the technical formulation of the underlying relation, which is crucial for an actual implementation, requires some explanation.
 
 \label{ssec:imidiate-following}
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{lara_drinks_tea}
-\caption{Phrase-Structure Parse Tree: Yellow nodes have no preceding nodes, blue nodes are imidiate followers of the yellow markes NP node.}
+\caption{Phrase-Structure Parse Tree: Yellow nodes have no preceding nodes, blue nodes are immediate followers of the yellow marks NP node.}
 \label{fig:lara-drinks-tea}
 \end{figure}
 
@@ -97,28 +99,28 @@ Figure \ref{fig:lara-drinks-tea} shows a phrase-structure parse tree of the sent
 \[NP\ \ VP\ \ tea\ .\]
 How to decide which one matches the sentence and which one does not?  
 
-The nodes that can be in the beginning of a pattern are exactly the once that have no predecessor (yellow nodes in Figure \ref{fig:lara-drinks-tea}). Based on the XPath naming scheme, these nodes are said to be in a \textit{no-preceding} relation to the root node (here \textbf{S}). Both patterns would assign the yellow marked noun phrase node to their first pattern token. Once the NP node is fixed, he next possible nodes to match are: \textbf{VP}, \textbf{VBZ} or \textbf{drinks} (marked with blue). In general the constituents that can stand at the next position in a pattern hold a relation called \textit{imidiate-following} to the previous constituent.
+The nodes that can be in the beginning of a pattern are exactly the once that have no predecessor (yellow nodes in Figure \ref{fig:lara-drinks-tea}). Based on the XPath naming scheme, these nodes are said to be in a \textit{no-preceding} relation to the root node (here \textbf{S}). Both patterns would assign the yellow marked noun phrase node to their first pattern token. Once the NP node is fixed, he next possible nodes to match are: \textbf{VP}, \textbf{VBZ} or \textbf{drinks} (marked with blue). In general the constituents that can stand at the next position in a pattern hold a relation called \textit{immediate-following} to the previous constituent.
 
 \begin{definition}[imidiate-following]
- If a node has preceding siblings, then the first preceding sibling is imidiate-following. If a node has no preceding siblings then the first preceding sibling of the closest ancestor that has preceding siblings is imidiate-following. The first child of an imidiate-following node is imidiate-following.
+ If a node has preceding siblings, then the first preceding sibling is immediate-following. If a node has no preceding siblings then the first preceding sibling of the closest ancestor that has preceding siblings is immediate-following. The first child of an immediate-following node is immediate-following.
 \end{definition}
 
-In the first pattern, $drinks$ would match to the \textbf{drinks} terminal node. The token $NP_1$ would consequently match to the second \textbf{NP} node and at the end the dot token to the punctuation constituent node. The whole pattern matches. In the second pattern the token $VP$ matches to the node \textbf{VP}. The set imidiate-following nodes for \textbf{VP} only contains the punctuation nodes. Hence the next token $tea$ cannot match, so the whole pattern does not match.
+In the first pattern, $drinks$ would match to the \textbf{drinks} terminal node. The token $NP_1$ would consequently match to the second \textbf{NP} node and at the end the dot token to the punctuation constituent node. The whole pattern matches. In the second pattern the token $VP$ matches to the node \textbf{VP}. The set immediate-following nodes for \textbf{VP} only contains the punctuation nodes. Hence the next token $tea$ cannot match, so the whole pattern does not match.
 
 
-\section{The Domain Specific Languge}
+\section{The Domain Specific Language}
 
-Before the pattern matching can begin a representation of the sententence structure, called the \textit{property tree}, which incorporates different sources of informations is created. It is based on the phrase-structure parse tree with additional propertries assigned to some node. The nodes of ther property tree are also just refered to as constituents. For example, if the named-entity of a word is 'person', a new variable with name 'ner' and value 'person' can be created and added to the corresponding constituent.
+Before the pattern matching can begin a representation of the sentence structure, called the \textit{property tree}, which incorporates different sources of information is created. It is based on the phrase-structure parse tree with additional properties assigned to some node. The nodes of the property tree are also just referred to as constituents. For example, if the named-entity of a word is 'person', a new variable with name 'ner' and value 'person' can be created and added to the corresponding constituent.
 
-After that a set of rules is loaded the way how patterns of constituents are translated into semantic domain. A rule consists of four parts, each separated by a collon: 
+After that a set of rules is loaded the way how patterns of constituents are translated into semantic domain. A rule consists of four parts, each separated by a colon: 
 
 \[ \mathtt{root\text{-}pattern\ :\ pattern\ :\ relations\ :\ transformation} \] 
 
 The \textit{root-pattern} is a single and the \textit{pattern} is a series of \textit{pattern-tokens}. A pattern-token defines a set of constraints in order to match a single node or in special cases multiple nodes (see Section \ref{para:multi}) of the property tree.
-A node that is matched by the root-pattern will form the root node of a subtree (of the property tree). The pattern is written in a Hearst-Pattern style (just like in Section \ref{ssec:imidiate-following}) and can match constituents inside the subtree streched by the root-pattern. Constituents matched by two adjacent pattern-tokens must stand in a imidiate-following relationship. In the simplest case the pattern token can  be the label of a constituent (for example $\mathtt{NP}$) or a terminal (for example $\mathtt{drinks}$). The algorithm automatically adds 'label=NP' for constituents and 'terminal=drinks' for terminals to the constraints set. If the same name occures more than ones, numbers can be added to the token (for example $\mathtt{NP1}$). The numbers will just effect the variable name of the pattern-token, not the constraint set.  
-The \textit{relations} part defines new edges of a graph. The variable names of the pattern-tokens are hereby reused. $\mathtt{NP-drinks}$ will create a directed edge between a node associated to constituent matched by $\mathtt{NP}$ and a node associated to constrituent matched by $\mathtt{drinks}$.
-The \textit{transformation} part assigns a head-constrituents to the constituent matched by the root-pattern. It consists usually of one pattern-token variable name (in special cases more, see head-splitting). If another rule tries to create an edge pointing the the constituent matched by the root-pattern, it will instead point to the head-constituent.
-Once all rules are parsed the constituent tags of the graph are replaced by the corresponing terminal strings.
+A node that is matched by the root-pattern will form the root node of a subtree (of the property tree). The pattern is written in a Hearst-Pattern style (just like in Section \ref{ssec:imidiate-following}) and can match constituents inside the subtree stretched by the root-pattern. Constituents matched by two adjacent pattern-tokens must stand in a immediate-following relationship. In the simplest case the pattern token can  be the label of a constituent (for example $\mathtt{NP}$) or a terminal (for example $\mathtt{drinks}$). The algorithm automatically adds 'label=NP' for constituents and 'terminal=drinks' for terminals to the constraints set. If the same name occurs more than ones, numbers can be added to the token (for example $\mathtt{NP1}$). The numbers will just effect the variable name of the pattern-token, not the constraint set.  
+The \textit{relations} part defines new edges of a graph. The variable names of the pattern-tokens are hereby reused. $\mathtt{NP-drinks}$ will create a directed edge between a node associated to constituent matched by $\mathtt{NP}$ and a node associated to constituents matched by $\mathtt{drinks}$.
+The \textit{transformation} part assigns a head-constituents to the constituent matched by the root-pattern. It consists usually of one pattern-token variable name (in special cases more, see head-splitting). If another rule tries to create an edge pointing the the constituent matched by the root-pattern, it will instead point to the head-constituent.
+Once all rules are parsed the constituent tags of the graph are replaced by the corresponding terminal strings.
 \begin{figure}
 \centering
 \includegraphics[width=.6\linewidth]{step_example_parsetree}
@@ -134,14 +136,14 @@ Once all rules are parsed the constituent tags of the graph are replaced by the 
  PP : IN DT N  : DT-N  N-IN : IN 
  DT : a :: indefinite
 \end{lstlisting}
-\caption{Parsetree and rules for table \ref{tab:step-by-step}}
+\caption{Parse tree and rules for table \ref{tab:step-by-step}}
 \label{fig:step-by-step}
 \end{figure}
-Table \ref{tab:step-by-step} gives a step-by-step example of the whole matching and graph-building process applied. The parse tree and rules hereby used are can be seen in Figure \ref{fig:step-by-step}. Coloumn one shows which constituents (bold font) mached to which pattern-token (typewriter font). Coloumn two show the varaibel graph at that point. Column two show the actual resulting graph, if the terminal assignment would already be performed at that point.
+Table \ref{tab:step-by-step} gives a step-by-step example of the whole matching and graph-building process applied. The parse tree and rules hereby used are can be seen in Figure \ref{fig:step-by-step}. Column one shows which constituents (bold font) matched to which pattern-token (typewriter font). Column two show the variable graph at that point. Column two show the actual resulting graph, if the terminal assignment would already be performed at that point.
 
 
 \paragraph{Macros}{
-  Macros are syntactic sugar for matching multiple options.  The list bilow contains all macros currently in the system:
+  Macros are syntactic sugar for matching multiple options.  The list below contains all macros currently in the system:
 
   \begin{lstlisting}
   V  = {VB, VBD, VBG, VBN, VBP, VBZ}
@@ -155,29 +157,29 @@ Table \ref{tab:step-by-step} gives a step-by-step example of the whole matching 
 }
 
 \paragraph{Property matching}
-Matching of other properties than 'terminal' or 'label' is expressed in squared brackets after the variable name. Write a variable name and a value separated by an equal sign to check if a node has a property with that name and value. The expression \lstinline{N[ner=person]} matches nouns with the NER-tag 'person'. Write only the variable name to check if a node has a propertry with that name. \lstinline{J[color]} matches adjectives with the property 'color'. Multiple constraints are separeted by a comma: \lstinline{N[ner=person | gender=female]}.
-The right hand side of a property constraint can also be a set values. In this case a constitiuent must have one of these properties to match. Example: \lstinline|DT[terminal={an,a}]| - matches a determiner with terminal 'a' or 'an'.
+Matching of other properties than 'terminal' or 'label' is expressed in squared brackets after the variable name. Write a variable name and a value separated by an equal sign to check if a node has a property with that name and value. The expression \lstinline{N[ner=person]} matches nouns with the NER-tag 'person'. Write only the variable name to check if a node has a property with that name. \lstinline{J[color]} matches adjectives with the property 'color'. Multiple constraints are separated by a comma: \lstinline{N[ner=person | gender=female]}.
+The right hand side of a property constraint can also be a set values. In this case a constituent must have one of these properties to match. Example: \lstinline|DT[terminal={an,a}]| - matches a determiner with terminal 'a' or 'an'.
 
 \paragraph{Multiple and Optional parsing}
 \label{para:multi}
-Variables defined in pattern can occure multiple times to match multiple constituents. The relations defind for that variable are consequently applied to all matches. Example: The rule \lstinline{S : N V and V . : N-V : S} 
+Variables defined in pattern can occur multiple times to match multiple constituents. The relations defined for that variable are consequently applied to all matches. Example: The rule \lstinline{S : N V and V . : N-V : S} 
 contains two time the variable \lstinline{V}. The rule applied to "Hanna walks and talks." will match 'walks' as well as 'talks' for \lstinline{V}. So the relation \lstinline{N-V} is formed two times, resulting in: (Hanna)$\rightarrow$ [walks], and (Hanna)$\rightarrow$ [talks].
-Three postfix operators, inspiered by regular expressions, can be added to the end of a pattern token, to make the match optional or repetitive. Multiple nodes assigned to a variable are handled in same way as before.
+Three postfix operators, inspired by regular expressions, can be added to the end of a pattern token, to make the match optional or repetitive. Multiple nodes assigned to a variable are handled in same way as before.
 
 \begin{tabular}{cll}
   $\mathbf{?}$ & optional & match once or do not match\\
-  $+$ & mutliple & match at least once\\
-  $*$ & multinal & match arbitrary times (inlcuding: do not match)
+  $+$ & multiple & match at least once\\
+  $*$ & multinal & match arbitrary times (including: do not match)
 \end{tabular}
 
 Example: \lstinline{NP : DT? J* N : J-N : N} matches a noun with or with or without a preceding determiner and arbitrary adjectives.
 
 
 \paragraph{Cluster references}
-If a sentence contains a dependent clause, one part of the sentence referece to another part of the sentence. For this purpose it is possible to specifiy a subgraph instead of a node as the head. If the root of a rule is equal to its transistions, the entities refering to the ancestors of a matching constituent will be put into a cluster. If another entity wants to point to the entity representing the root match, it will point to the cluster instead.
+If a sentence contains a dependent clause, one part of the sentence reference to another part of the sentence. For this purpose it is possible to specify a subgraph instead of a node as the head. If the root of a rule is equal to its transitions, the entities referring to the ancestors of a matching constituent will be put into a cluster. If another entity wants to point to the entity representing the root match, it will point to the cluster instead.
 
 \paragraph{Head Splitting}
-For some sentences it is desireable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
+For some sentences it is desirable to let a node point to multiple other nodes. Consider this conjunction of two verb phrases: "Bob runs and cries."
 
 \paragraph{Predicate Mode}
 In predicate mode the relations part of a rule will define predicates instead of edges, with a slide changed of syntax. Example: 
@@ -237,7 +239,7 @@ SS : NP VP .? : NP-VP : SS
 SS : IN SS1   :       : SS1
 VP : V SS     : V-SS  : V\end{lstlisting}
   \includegraphics[width=1\linewidth]{cluster_reference_graph}
-  \caption{\textbf{Cluster References.} Root and tail of line 1 are both SS: ... Line 2: "that" is ommited. Line 3: make an edge beteween the verb of the first part ("said") and the dependent clause "Lara smokes". }
+  \caption{\textbf{Cluster References.} Root and tail of line 1 are both SS: ... Line 2: "that" is omitted. Line 3: make an edge between the verb of the first part ("said") and the dependent clause "Lara smokes". }
   \label{fig:cluster-ref}
   \end{figure}
 \end{minipage}%
@@ -251,7 +253,7 @@ VP : V SS     : V-SS  : V\end{lstlisting}
 SS : NP  VP .   : NP-VP : SS
 VP : VP1 CC VP2 :       : VP1 VP2\end{lstlisting}
   \includegraphics[width=.4\linewidth]{headsplit_graph}
-  \caption{\textbf{Head Splitting.} The rules in the middle applied to the parsetree on the top yield the graph in the bottom.}
+  \caption{\textbf{Head Splitting.} The rules in the middle applied to the parse tree on the top yield the graph in the bottom.}
   \label{fig:head-splitting}
   \end{figure}
 \end{minipage}
@@ -288,7 +290,7 @@ In line 2 and 3 of MatchPattern only nodes that match the root-pattern are selec
 }
 \end{algorithm}
 
-In line 2 and 3 of FindAssignment assignment becomes an empty list, where the varaibel assignments created from the pattern tokens, can be stored. Line 5 is the recursion stop. If all variables have an assignment and if there are nodes imidiate-followers to the last matching node, the current assignment is a match. Line 8 pics the data from the current pattern-token. Line 9 and 10 selects all nodes that match the pattern-token (aka have all properties requiered by the constraints). Line 11 and 12: If a node matches, that node is assigned to the variable and FindAssignment is called for next pattern-token again.
+In line 2 and 3 of FindAssignment assignment becomes an empty list, where the variable assignments created from the pattern tokens, can be stored. Line 5 is the recursion stop. If all variables have an assignment and if there are nodes immediate-followers to the last matching node, the current assignment is a match. Line 8 pics the data from the current pattern-token. Line 9 and 10 selects all nodes that match the pattern-token (aka have all properties required by the constraints). Line 11 and 12: If a node matches, that node is assigned to the variable and FindAssignment is called for next pattern-token again.
 
 \begin{algorithm}
 \SetAlgoLined
@@ -329,16 +331,16 @@ In line 2 and 3 of FindAssignment assignment becomes an empty list, where the va
 
         for node in nodes:
 
-            satisfies_constaints = node.has_properties(**constraints)
+            satisfies_constraints = node.has_properties(**constraints)
 
-            if not satisfies_constaints:
+            if not satisfies_constraints:
                 continue
 
             match[index] = (varname, node) # assign node to variable
 
-            imidiate_following = node.imidiate_following(root=head_node)
+            immediate_following = node.immediate_following(root=head_node)
 
-            yield from self._search(imidiate_following, pattern, head_node, match, index+1)
+            yield from self._search(immediate_following, pattern, head_node, match, index+1)
 
 \end{comment}
 
@@ -365,10 +367,10 @@ Since multiple and optional matching is not yet implemented, here is a version w
 This rule applied to the sentence: "Snakes such as pythons, cobras, and boas are reptiles.", results in three edges: pythons $\rightarrow$ snakes, cobras $\rightarrow$ snakes, and boas $\rightarrow$ snakes.
 
 
-\paragraph{Acknowledgements.} This work was part of the \textit{Knoex} project (abbr. knowledge
-extraction from text), which again was a subproject of the \textit{SOMA} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In the current version the postfix operator for optional and multiple matching as well as head-splitting is not implemented.
+\paragraph{Acknowledgments.} This work was part of the \textit{Knoex} project (abbr. knowledge
+extraction from text), which again was a sub-project of the \textit{Souma} study project at the University of Osnabrück. A working implementation can be downloaded from \url{http://github.com/mome/treepattern}. In the current version the postfix operator for optional and multiple matching as well as head-splitting is not implemented.
 
 \bibliographystyle{apalike}
 \bibliography{knoex.bib}
 
-\end{document}
+\end{document}  
