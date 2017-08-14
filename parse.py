@@ -76,7 +76,7 @@ class RuleParser:
             + Suppress(':')
             + Optional(transformation)
         ).setResultsName('rule')
-        
+
         rule.ignore( pythonStyleComment )
 
         self._parser = rule
@@ -117,3 +117,33 @@ class RuleParser:
             else:
                constraint_dict[key] = value_set
         return cls.PatternToken(ptoken.alpha + ptoken.num, constraint_dict)
+
+
+def parse_tree_str(tree):
+    """Turns a phrase structure tree output from Stanford Parser into a list of lists."""
+
+    if type(tree) is str:
+        tree = tree.replace('\n', ' ')
+        tree = tree.replace('(',' ( ')
+        tree = tree.replace(')',' ) ')
+        tokens = filter(None, tree.split(' '))
+    else:
+        tokens = tree
+
+    out = []
+
+    for tok in tokens:
+        if tok == '(':
+            subtree = parse_tree_str(tokens)
+            out.append(subtree)
+        elif tok == ')':
+            break
+        else:
+            out.append(tok)
+
+    return out
+
+# filter should be like this
+"""_filter = filter
+def filter(iterable, func=None):
+    return _filter(func, iterable)"""
