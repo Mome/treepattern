@@ -9,6 +9,7 @@ def partialsort(elements, cmp):
             L[i], L[j] = L[j], L[i]
     return L
 
+
 def proptree_to_dot(proptree):
 
     postags = []
@@ -50,7 +51,7 @@ def proptree_to_dot(proptree):
 
 def property_tree_to_dot(tree) :
     """ Transforms a propertytrees in a digraph dotcode"""
-    
+
     dot_code = 'digraph graphname {\n'
     dot_code += str(0) + ' [label="' + tree.label() + '"];\n'
 
@@ -80,4 +81,3 @@ def property_tree_to_dot(tree) :
     dot_code += new_code + '}'
 
     return dot_code
-    

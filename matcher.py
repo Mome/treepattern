@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from rules import RuleParser
+from parse import RuleParser
 
 class PatternMatcher:
 
@@ -29,7 +29,7 @@ class PatternMatcher:
         for pt, sent in zip(parse_trees, sents):
 
             pt = list(pt)[0][0] # convert to list get tree and remove root node
-            
+
             #pt.draw()
             logging.debug('ParseTree:' + pformat(pt))
 
@@ -63,12 +63,12 @@ class PatternMatcher:
                     continue
                 if self.head_only_ones and head_node in matched_nodes:
                     continue
-                
+
                 if self.whole:
                     start_nodes = head_node.no_preceding()
                 else:
                     start_nodes = head_node.descendant_or_self()
-                
+
                 for match in self._search(start_nodes, pattern, head_node):
 
                     # TODO -- check for double varnames ?
@@ -103,7 +103,7 @@ class PatternMatcher:
         if len(pattern) == index:
             if self.whole:
                 nodes = list(nodes)
-                
+
             if self.whole and len(nodes):
                 #print(nodes, index)
                 logging.debug('Match, but not whole.')

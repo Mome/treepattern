@@ -1,27 +1,18 @@
-from itertools import chain, count#, islice, tee, takewhile, dropwhile
+from itertools import chain, count
 from pprint import pformat
-#from collections import namedtuple
-#from random import choice
 import os
 import logging
 
-import nltk
-from nltk.parse import stanford
-
 from utils import partialsort
 from trees import PropertyTree
-from rules import constituent_macros
+from parse import constituent_macros
 from graph import ConceptualGraph
-
-stanford_path = os.path.expanduser('~/.local/stanford-parser-full-2015-12-09')
-os.environ['STANFORD_MODELS'] = stanford_path
-os.environ['STANFORD_PARSER'] = stanford_path
-stanford_parser = stanford.StanfordParser() 
 
 relation_constituents = ['IN', 'TO']
 statement_constituents = constituent_macros['SS'] + constituent_macros['W']
 property_constituents = constituent_macros['J']
 process_constituents = constituent_macros['V'] + ['VP']
+
 
 def contsituen2type(const):
     if const in relation_constituents:
@@ -34,7 +25,7 @@ def contsituen2type(const):
         return 'process'
 
 class GraphBuilder:
-    
+
     def __init__(self, pattern_matcher):
         self.pattern_matcher = pattern_matcher
 
@@ -54,7 +45,7 @@ class GraphBuilder:
         for pt, sent in zip(parse_trees, sents):
 
             pt = list(pt)[0][0] # convert to list get tree and remove root node
-            
+
             #import threading; threading.Thread(None, pt.draw).start()
             # pt.draw()
 
@@ -68,7 +59,7 @@ class GraphBuilder:
             tmp_list = [
                 (match.relations, match.transformation)
                 for match in self.pattern_matcher.match_rules(prop_tree)]
-            
+
             if len(tmp_list) == 0:
                 logging.info('No match for: "' + ' '.join(sent) + '"')
                 continue
@@ -135,7 +126,7 @@ class GraphBuilder:
                         label=right if isinstance(right, str) else right['terminal'],
                         type=contsituen2type(None if isinstance(right, str) else right['label']),
                         subgraph=right_subgraph)
-                
+
                 graph.add_edge(left_node, right_node)
 
             # whenever something references a cluster

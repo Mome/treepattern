@@ -1,28 +1,33 @@
 from builder import GraphBuilder
 from matcher import PatternMatcher
 import logging
-import sys
 
 
-args=sys.argv[1:]
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("tree", help="Stanford parser output.")
+    return parser.parse_args()
 
-if not args:
-    raise Warning('Need sentences!')
-    sys.exit(0)
 
-logging.basicConfig(level=logging.INFO)
+def main():
+    logging.basicConfig(level=logging.INFO)
 
-sents = args[0]
+    with open('rules') as f:
+        rules = f.read()
 
-with open('rules') as f:
-    rules = f.read()
+    matcher = PatternMatcher.from_str(rules)
+    builder = GraphBuilder(matcher)
 
-matcher = PatternMatcher.from_str(rules)
-builder = GraphBuilder(matcher)
+    for graph in builder.build(sents):
+        dot_code = graph.to_dot()
+        print(dot_code)
 
-for graph in builder.build(sents):
-    dot_code = graph.to_dot()
-    print(dot_code)
+
+from parse import parse_tree_str
+tree = parse_args().tree
+tree = parse_tree_str(tee)
+    
 
 """print()
 print()
