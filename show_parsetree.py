@@ -1,14 +1,17 @@
-import nltk, os, sys
+import os
+import sys
+
+import nltk
 from nltk.parse import stanford
-from utils import proptree_to_dot
-from trees import PropertyTree
-from builder import add_properties
 
-
-stanford_path = os.path.expanduser('~/.local/stanford-parser-full-2015-12-09')
+stanford_path = os.path.expanduser('~/.local/stanford-parser')
 os.environ['STANFORD_MODELS'] = stanford_path
 os.environ['STANFORD_PARSER'] = stanford_path
 stanford_parser = stanford.StanfordParser()
+
+from utils import proptree_to_dot
+from trees import PropertyTree
+from builder import add_properties
 
 
 sents = " ".join(sys.argv[1:])
