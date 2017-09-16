@@ -3,10 +3,15 @@ from pprint import pformat
 import os
 import logging
 
+import nltk
+from nltk.parse import stanford
+
 from utils import partialsort
 from trees import PropertyTree
 from parse import constituent_macros
 from graph import ConceptualGraph
+
+stanford_parser = stanford.StanfordParser()
 
 relation_constituents = ['IN', 'TO']
 statement_constituents = constituent_macros['SS'] + constituent_macros['W']
@@ -33,7 +38,7 @@ class GraphBuilder:
 
         # tokenize sentences
         if isinstance(sents, str):
-            sents = sents.lower() # convert to lower case !!!
+            #sents = sents.lower() # convert to lower case !!!
             sents = [
                 nltk.word_tokenize(s)
                 for s in nltk.sent_tokenize(sents)
